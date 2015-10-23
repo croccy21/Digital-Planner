@@ -13,16 +13,16 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class PlannerDatabase extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "PlannerDatabase.db";
-    private static final String HOMEWORK_TABLE_NAME = "homework";
-    private static final String HOMEWORK_COLUMN_ID = "_id";
-    private static final String HOMEWORK_COLUMN_NAME = "name";
-    private static final String HOMEWORK_COLUMN_DESCRIPTION = "description";
-    private static final String HOMEWORK_CREATE_TABLE = "CREATE TABLE " + HOMEWORK_TABLE_NAME + " (" +
-            HOMEWORK_COLUMN_ID + "INTEGER PRIMARY KEY, " +
-            HOMEWORK_COLUMN_NAME + "TEXT, " +
-            HOMEWORK_COLUMN_DESCRIPTION + "TEXT" + ")";
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "PlannerDatabase.db";
+    public static final String HOMEWORK_TABLE_NAME = "homework";
+    public static final String HOMEWORK_COLUMN_ID = "_id";
+    public static final String HOMEWORK_COLUMN_NAME = "name";
+    public static final String HOMEWORK_COLUMN_DESCRIPTION = "description";
+    public static final String HOMEWORK_CREATE_TABLE = "CREATE TABLE " + HOMEWORK_TABLE_NAME + " (" +
+            HOMEWORK_COLUMN_ID + " INTEGER PRIMARY KEY, " +
+            HOMEWORK_COLUMN_NAME + " TEXT, " +
+            HOMEWORK_COLUMN_DESCRIPTION + " TEXT" + ")";
 
     PlannerDatabase(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,6 +32,7 @@ public class PlannerDatabase extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(HOMEWORK_CREATE_TABLE);
+        //insertHomework("Dummy", "This is not real data");
     }
 
     @Override
@@ -66,7 +67,16 @@ public class PlannerDatabase extends SQLiteOpenHelper{
         return res;
     }
 
-    //public Cursor getAllPersons(){
-//
-   // }
+    public Cursor getAllHomeworks(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + HOMEWORK_TABLE_NAME,null);
+        return res;
+    }
+
+    public Integer deleteHomework(Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(HOMEWORK_TABLE_NAME,
+                HOMEWORK_COLUMN_ID + " = ? ",
+                new String[] { Integer.toString(id) });
+    }
 }
