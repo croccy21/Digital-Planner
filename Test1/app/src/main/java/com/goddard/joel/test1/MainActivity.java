@@ -1,5 +1,6 @@
 package com.goddard.joel.test1;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -49,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Test1", String.format("%s, %s, %s",cursor.getColumnNames()));
         cursorAdapter = new SimpleCursorAdapter(this, R.layout.homework_item,
                 cursor, columns, widgets, 0);
-        listView = (ListView) findViewById(R.id.homework_list);
-        listView.setAdapter(cursorAdapter);
+//        listView = (ListView) findViewById(R.id.homework_list);
+//        listView.setAdapter(cursorAdapter);
 
     }
 
@@ -60,5 +61,10 @@ public class MainActivity extends AppCompatActivity {
         final Cursor cursor = plannerDatabase.getAllHomeworks();
         cursorAdapter.changeCursor(cursor);
         cursorAdapter.notifyDataSetChanged();
+    }
+
+    public void runTest1(View view) {
+        Intent i = new Intent(this, HomeworksActivity.class);
+        startActivity(i);
     }
 }
