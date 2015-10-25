@@ -15,7 +15,8 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/homework_edit_name"/>
+        android:id="@+id/homework_edit_name"
+        android:hint="Name (of homework)"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,6 +24,8 @@
         android:singleLine="false"
         android:lines="4"
         android:id="@+id/homework_edit_description"
+        android:hint="Description of homework\ne.g. complete sheet on logarithms"
+        android:gravity="bottom"
         />
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,7 +37,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Cancel"
-            android:id="@+id/button_cancel"/>
+            android:id="@+id/button_cancel"
+            android:onClick="cancelEdit"/>
 
         <Button
             android:layout_width="0dp"

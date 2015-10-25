@@ -76,11 +76,14 @@ public class HomeworksActivity extends AppCompatActivity {
         if(resultCode==RESULT_OK) {
             String name = data.getStringExtra(HomeworkEditActivity.PARAMETER_NAME);
             String description = data.getStringExtra(HomeworkEditActivity.PARAMETER_DESCRIPTION);
-            Log.d("Returned", "Recieved: " + name + ", " + description);
             if(name!=null && description!=null){
                 plannerDatabase.updateHomework(requestCode, name, description);
                 updateList();
             }
+        }
+        else if (resultCode==RESULT_CANCELED){
+            plannerDatabase.deleteHomework(requestCode);
+            updateList();
         }
     }
 }

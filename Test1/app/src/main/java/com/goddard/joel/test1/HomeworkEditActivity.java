@@ -54,9 +54,11 @@ public class HomeworkEditActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent data = new Intent();
-        data.putExtra(PARAMETER_NAME, editName.getText());
-        data.putExtra(PARAMETER_DESCRIPTION, editDesctription.getText());
+        data.putExtra(PARAMETER_NAME, editName.getText().toString());
+        data.putExtra(PARAMETER_DESCRIPTION, editDesctription.getText().toString());
         setResult(RESULT_OK, data);
         finishAfterTransition();
     }
+
+
 }

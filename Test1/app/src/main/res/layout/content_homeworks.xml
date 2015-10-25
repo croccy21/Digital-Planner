@@ -12,8 +12,6 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
         android:layout_gravity="top"
         android:id="@+id/homework_list"/>
 
