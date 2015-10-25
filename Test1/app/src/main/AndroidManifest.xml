@@ -20,6 +20,11 @@
             android:label="@string/title_activity_homeworks"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".HomeworkEditActivity"
+            android:label="@string/title_activity_homework_edit"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

@@ -41,13 +41,12 @@ public class PlannerDatabase extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public boolean insertHomework(String name, String description){
+    public long insertHomework(String name, String description){
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(HOMEWORK_COLUMN_NAME, name);
         contentValues.put(HOMEWORK_COLUMN_DESCRIPTION, description);
-        db.insert(HOMEWORK_TABLE_NAME, null, contentValues);
-        return true;
+        return db.insert(HOMEWORK_TABLE_NAME, null, contentValues);
     }
 
     public boolean updateHomework(int id, String name, String description){

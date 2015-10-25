@@ -2,4 +2,5 @@
     <string name="app_name">Test1</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_homeworks">HomeworksActivity</string>
+    <string name="title_activity_homework_edit">HomeworkEditActivity</string>
 </resources>
