@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.goddard.joel.digitalplanner.BlockEdit">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/block_start_time"
+                android:onClick="startTimeClick"
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00:00"
+                android:textSize="32sp"
+                android:gravity="center_horizontal"
+                android:padding="16dp"
+
+                android:textAllCaps="false"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="to"
+                android:textSize="32sp"
+                android:gravity="center_horizontal"/>
+
+            <Button
+                android:id="@+id/block_end_time"
+                android:onClick="endTimeClick"
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00:00"
+                android:textSize="32sp"
+                android:gravity="center_horizontal"
+                android:padding="16dp"
+
+                android:textAllCaps="false"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="M"
+                android:textSize="32sp"
+                android:gravity="center_horizontal"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="T"
+                android:textSize="32sp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="W"
+                android:textSize="32sp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="T"
+                android:textSize="32sp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="F"
+                android:textSize="32sp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="S"
+                android:textSize="32sp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="S"
+                android:textSize="32sp"
+                android:gravity="center_horizontal"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <CheckBox
+                android:id="@+id/addStuff"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:checked="true"
+                android:gravity="center_horizontal"/>
+
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:checked="true"
+                android:gravity="center_horizontal"/>
+
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:checked="true"
+                android:gravity="center_horizontal"/>
+
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:checked="true"
+                android:gravity="center_horizontal"/>
+
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:checked="true"
+                android:gravity="center_horizontal"/>
+
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:checked="false"
+                android:gravity="center_horizontal"/>
+
+            <CheckBox
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:checked="false"
+                android:gravity="center_horizontal"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#A0A0A0"/>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+            android:padding="8dp">
+            <Button
+                android:id="@+id/block_subject"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Undefined Subject"
+                android:textSize="30sp"
+                android:layout_column="1"
+                android:padding="8dp"
+
+                android:textAllCaps="false"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:text="With"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_column="0"
+                android:layout_row="1"/>
+            <Button
+                android:id="@+id/block_teacher"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Undefined Teacher"
+                android:textSize="30sp"
+                android:layout_column="1"
+                android:padding="8dp"
+
+                android:textAllCaps="false"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:text="At"
+                android:layout_column="0"/>
+            <Button
+                android:id="@+id/block_location"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Undefined Location"
+
+                android:textSize="30sp"
+                android:layout_column="1"
+                android:padding="8dp"
+
+                android:textAllCaps="false"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
+        </GridLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:elevation="1dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#A0A0A0"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Save"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cancel"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

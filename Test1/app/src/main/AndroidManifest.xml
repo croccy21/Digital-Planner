@@ -23,7 +23,8 @@
         <activity
             android:name=".HomeworkEditActivity"
             android:label="@string/title_activity_homework_edit"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
         </activity>
     </application>
 

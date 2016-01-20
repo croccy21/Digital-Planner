@@ -11,11 +11,15 @@ import android.widget.EditText;
 
 public class HomeworkEditActivity extends AppCompatActivity {
 
+    public static final String PARAMETER_ID = "id";
+    public static final String PARAMETER_NAME = "name";
+    public static final String PARAMETER_DESCRIPTION = "description";
+
     private EditText editName;
     private EditText editDesctription;
+    private int id;
 
-    public static String PARAMETER_NAME = "name";
-    public static String PARAMETER_DESCRIPTION = "description";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,20 +30,31 @@ public class HomeworkEditActivity extends AppCompatActivity {
 
         editName = (EditText) findViewById(R.id.homework_edit_name);
         editDesctription = (EditText) findViewById(R.id.homework_edit_description);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        Intent i = getIntent();
+        if(i!=null){
+            id = i.getIntExtra(PARAMETER_ID,-1);
+            if(id==-1){
+                Intent data = new Intent();
+                data.putExtra(PARAMETER_ID, id);
+                setResult(RESULT_CANCELED, data);
+                finishAfterTransition();
             }
-        });
+            else{
+                String name = i.getStringExtra(PARAMETER_NAME);
+                String description = i.getStringExtra(PARAMETER_DESCRIPTION);
+
+                if (name!=null && description!=null){
+                    editName.setText(name);
+                    editDesctription.setText(description);
+                }
+            }
+        }
     }
 
 
     public void saveData(View view) {
         Intent data = new Intent();
+        data.putExtra(PARAMETER_ID, id);
         data.putExtra(PARAMETER_NAME, editName.getText().toString());
         data.putExtra(PARAMETER_DESCRIPTION, editDesctription.getText().toString());
         setResult(RESULT_OK, data);
@@ -47,13 +62,16 @@ public class HomeworkEditActivity extends AppCompatActivity {
     }
 
     public void cancelEdit(View view){
-        setResult(RESULT_CANCELED);
+        Intent data = new Intent();
+        data.putExtra(PARAMETER_ID, id);
+        setResult(RESULT_CANCELED, data);
         finishAfterTransition();
     }
 
     @Override
     public void onBackPressed() {
         Intent data = new Intent();
+        data.putExtra(PARAMETER_ID, id);
         data.putExtra(PARAMETER_NAME, editName.getText().toString());
         data.putExtra(PARAMETER_DESCRIPTION, editDesctription.getText().toString());
         setResult(RESULT_OK, data);

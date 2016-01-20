@@ -2,4 +2,6 @@
     <string name="app_name">Test App</string>
     <string name="title_activity_homeworks">Homeworks</string>
     <string name="title_activity_homework_edit">Edit Homework</string>
+    <string name="transition_homework_name">homework name</string>
+    <string name="transition_homework_description">homework descrition</string>
 </resources>

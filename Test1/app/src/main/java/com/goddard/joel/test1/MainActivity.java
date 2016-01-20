@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        final Cursor cursor = plannerDatabase.getAllHomeworks();
+        final Cursor cursor = plannerDatabase.getAllHomeworks(PlannerDatabase.HOMEWORK_COLUMN_ID, PlannerDatabase.HOMEWORK_COLUMN_NAME, PlannerDatabase.HOMEWORK_COLUMN_DESCRIPTION);
 
         String[] columns = new String[]{
                 PlannerDatabase.HOMEWORK_COLUMN_ID,
