@@ -124,16 +124,16 @@ public class DatabaseTest {
         DatabaseTableSubjectLocation.insert(db, idSubjectE, idLocation6);
         DatabaseTableSubjectLocation.insert(db, idSubjectF, idLocation6);
 
-        long idBlockA1 = DatabaseTableBlock.insert(db, "aiday",  20, 65, idSubjectA, idTeacherA, idLocation1);
-        long idBlockA2 = DatabaseTableBlock.insert(db, "aiday",  90, 65, idSubjectB, idTeacherB, idLocation4);
-        long idBlockA3 = DatabaseTableBlock.insert(db, "aiday", 160, 65, idSubjectC, idTeacherC, idLocation6);
-        long idBlockA4 = DatabaseTableBlock.insert(db, "aiday", 230, 65, idSubjectA, idTeacherD, idLocation3);
-        long idBlockA5 = DatabaseTableBlock.insert(db, "aiday", 300, 65, idSubjectD, idTeacherE, idLocation3);
-        long idBlockB1 = DatabaseTableBlock.insert(db, "beday",  30, 65, idSubjectE, idTeacherF, idLocation5);
-        long idBlockB2 = DatabaseTableBlock.insert(db, "beday", 100, 65, idSubjectF, idTeacherB, idLocation6);
-        long idBlockB3 = DatabaseTableBlock.insert(db, "beday", 170, 65, -1,         -1,         -1         );
-        long idBlockB4 = DatabaseTableBlock.insert(db, "beday", 240, 65, idSubjectC, idTeacherE, idLocation4);
-        long idBlockB5 = DatabaseTableBlock.insert(db, "beday", 310, 65, idSubjectB, idTeacherC, idLocation1);
+        long idBlockA1 = DatabaseTableBlock.insert(db, 1,  20, 65, idSubjectA, idTeacherA, idLocation1);
+        long idBlockA2 = DatabaseTableBlock.insert(db, 1,  90, 65, idSubjectB, idTeacherB, idLocation4);
+        long idBlockA3 = DatabaseTableBlock.insert(db, 1, 160, 65, idSubjectC, idTeacherC, idLocation6);
+        long idBlockA4 = DatabaseTableBlock.insert(db, 1, 230, 65, idSubjectA, idTeacherD, idLocation3);
+        long idBlockA5 = DatabaseTableBlock.insert(db, 2, 300, 65, idSubjectD, idTeacherE, idLocation3);
+        long idBlockB1 = DatabaseTableBlock.insert(db, 2,  30, 65, idSubjectE, idTeacherF, idLocation5);
+        long idBlockB2 = DatabaseTableBlock.insert(db, 2, 100, 65, idSubjectF, idTeacherB, idLocation6);
+        long idBlockB3 = DatabaseTableBlock.insert(db, 2, 170, 65, -1,         -1,         -1         );
+        long idBlockB4 = DatabaseTableBlock.insert(db, 2, 240, 65, idSubjectC, idTeacherE, idLocation4);
+        long idBlockB5 = DatabaseTableBlock.insert(db, 2, 310, 65, idSubjectB, idTeacherC, idLocation1);
 
         long idLesson1a = DatabaseTableLesson.insert(db, idBlockA1, Calendar.getInstance().getTime(), false);
         long idLesson2a = DatabaseTableLesson.insert(db, idBlockA2, Calendar.getInstance().getTime(), false);

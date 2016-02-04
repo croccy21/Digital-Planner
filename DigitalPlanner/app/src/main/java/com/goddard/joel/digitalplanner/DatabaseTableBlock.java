@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.Calendar;
+
 /**
  * Created by Joel Goddard on 05/01/2016.
  *
@@ -38,7 +40,7 @@ public class DatabaseTableBlock {
     /**
      * Inserts a block into database
      * @param db database
-     * @param day string representing day
+     * @param day int representing day from {@link Calendar}
      * @param startTime start time in minutes since 00:00
      * @param length length in minutes
      * @param subjectID id of subject
@@ -46,7 +48,7 @@ public class DatabaseTableBlock {
      * @param locationID id of location
      * @return id of block
      */
-    public static long insert(Database db, String day, int startTime, int length, long subjectID, long teacherID, long locationID){
+    public static long insert(Database db, int day, int startTime, int length, long subjectID, long teacherID, long locationID){
         ContentValues values = new ContentValues();
         values.put(FIELD_DAY, day);
         values.put(FIELD_START_TIME, startTime);
@@ -57,7 +59,8 @@ public class DatabaseTableBlock {
 
         SQLiteDatabase dbw = db.getWritableDatabase();
         long id = dbw.insert(TABLE_BLOCK_NAME, null, values);
-        Log.d("DATABASE", String.format("New block with Index %1$s, Day: %2$s, startTime %3$s, length %4$s}", id, day, startTime, length));
+        Log.d("DATABASE", String.format("New block with Index %1$s, Day: %2$s, startTime %3$s, length %4$s, subjectID %5$s, teacher %6$s, location %7$s",
+                id, day, startTime, length, subjectID, teacherID, locationID));
         return id;
     }
 
@@ -65,7 +68,7 @@ public class DatabaseTableBlock {
      * Updates a block into database
      * @param db database
      * @param id block id
-     * @param day string representing day
+     * @param day int representing day
      * @param startTime start time in minutes since 00:00
      * @param length length in minutes
      * @param subjectID id of subject
@@ -73,7 +76,7 @@ public class DatabaseTableBlock {
      * @param locationID id of location
      * @return id of block
      */
-    public static long update(Database db, long id, String day, int startTime, int length, long subjectID, long teacherID, long locationID){
+    public static long update(Database db, long id, int day, int startTime, int length, long subjectID, long teacherID, long locationID){
         ContentValues values = new ContentValues();
         values.put(FIELD_DAY, day);
         values.put(FIELD_START_TIME, startTime);
@@ -106,7 +109,7 @@ public class DatabaseTableBlock {
      */
     public static Cursor getAll(Database db){
         SQLiteDatabase dbr = db.getReadableDatabase();
-        return dbr.query(false, TABLE_BLOCK_NAME, null, null, null, null, null, null, null);
+        return dbr.query(false, TABLE_BLOCK_NAME, null, null, null, null, null, FIELD_START_TIME, null);
     }
 
     /**
@@ -117,6 +120,11 @@ public class DatabaseTableBlock {
      */
     public static Cursor getByID(Database db, long id){
         SQLiteDatabase dbr = db.getReadableDatabase();
-        return dbr.query(false, TABLE_BLOCK_NAME, null, String.format("%s=%d", FIELD_BLOCK_ID, id), null, null, null, null, null);
+        return dbr.query(false, TABLE_BLOCK_NAME, null, String.format("%s=%d", FIELD_BLOCK_ID, id), null, null, null, FIELD_START_TIME, null);
+    }
+
+    public static Cursor getByDay(Database db, int day) {
+        SQLiteDatabase dbr = db.getReadableDatabase();
+        return dbr.query(false, TABLE_BLOCK_NAME, null, String.format("%s=%d", FIELD_DAY, day), null, null, null, FIELD_START_TIME, null);
     }
 }

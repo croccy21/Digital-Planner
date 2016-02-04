@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<navigationModel
+  ns = "http://schemas.android.com?import=com.android.tools.idea.editors.navigation.model.*">
+  <locations  
+    class = "java.util.ArrayList">
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "com.goddard.joel.digitalplanner.HomeworkEdit"/>
+      <point      
+        x = "1904"      
+        y = "188"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "com.goddard.joel.digitalplanner.CalenderActivity"/>
+      <point      
+        x = "1568"      
+        y = "1932"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "com.goddard.joel.digitalplanner.MainActivity"/>
+      <point      
+        x = "320"      
+        y = "224"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "com.goddard.joel.digitalplanner.CalendarTest"/>
+      <point      
+        x = "540"      
+        y = "516"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "com.goddard.joel.digitalplanner.BlockEdit"/>
+      <point      
+        x = "260"      
+        y = "1020"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "com.goddard.joel.digitalplanner.SubjectEdit"/>
+      <point      
+        x = "3152"      
+        y = "524"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "com.goddard.joel.digitalplanner.TeacherEdit"/>
+      <point      
+        x = "3776"      
+        y = "1980"/>
+    </statePointEntry>
+  </locations>
+</navigationModel>

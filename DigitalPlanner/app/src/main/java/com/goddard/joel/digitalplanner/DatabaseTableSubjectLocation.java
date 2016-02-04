@@ -92,6 +92,29 @@ public class DatabaseTableSubjectLocation {
     }
 
     /**
+     * Get all locations by subject with location data
+     * @param db database
+     * @param subjectID id of subject
+     * @return Cursor containing all teachers connected to subject id
+     */
+    public static Cursor getAllBySubjectIDWithLocation(Database db, long subjectID){
+        SQLiteDatabase dbr = db.getReadableDatabase();
+        return dbr.rawQuery(String.format(
+                "SELECT %4$s.%1$s as %1$s, %2$s " +
+                        "FROM %4$s " +
+                        "LEFT JOIN %5$s ON %4$s.%1$s=%5$s.%3$s " +
+                        "WHERE %7$s=%6$s",
+                DatabaseTableSubjectLocation.FIELD_LOCATION_ID,
+                DatabaseTableLocation.FIELD_NAME,
+                DatabaseTableLocation.FIELD_LOCATION_ID,
+                DatabaseTableSubjectLocation.TABLE_SUBJECT_LOCATION_NAME,
+                DatabaseTableLocation.TABLE_LOCATION_NAME,
+                subjectID,
+                DatabaseTableSubjectLocation.FIELD_SUBJECT_ID
+        ), null);
+    }
+
+    /**
      * get all subjects by location
      * @param db database
      * @param locationID id of location

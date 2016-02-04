@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.goddard.joel.digitalplanner.SubjectEdit"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp">
+
+
+                <EditText
+                    android:id="@+id/subject_name_edit"
+                    android:hint="Subject (e.g. Maths, English)"
+
+                    android:layout_alignParentTop="true"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="#ffffff"
+                    android:textColorHint="#f0f0d0"
+                    />
+
+                <CheckBox
+                    android:id="@+id/colour_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_alignRight="@id/subject_name_edit"
+                    >
+
+                </CheckBox>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:id="@+id/button_holder">
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Add Teacher"
+                    android:onClick="addTeacherClick"
+                    android:textColor="@color/colorAccent"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Add Location"
+                    android:onClick="addLocationClick"
+                    android:textColor="@color/colorAccent"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_item_holder"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:visibility="gone">
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/add_spinner"
+                    android:gravity="center_vertical"
+                    >
+                </Spinner>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DONE"
+                    android:textColor="@color/colorAccent"
+
+                    android:onClick="addItemDone"
+
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/new_item_holder"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:visibility="gone">
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="#ffffff"
+                    android:textColorHint="#f0f0d0"
+                    android:hint="Item Name (e.g. #######)"
+                    android:id="@+id/new_item_edit"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DONE"
+                    android:textColor="@color/colorAccent"
+
+                    android:onClick="newItemDone"
+
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Teachers"
+            android:layout_margin="4dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="#A0A0A0"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/subject_teacher_list">
+        </ListView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="#A0A0A0"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:layout_margin="4dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="#A0A0A0"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/subject_location_list">
+        </ListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:onClick="saveBtnClick"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="4dp"/>
+
+        <Button
+            android:onClick="cancelBtnClick"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="4dp"/>
+    </LinearLayout>
+</LinearLayout>

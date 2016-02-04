@@ -92,6 +92,29 @@ public class DatabaseTableSubjectTeacher {
     }
 
     /**
+     * Get all teachers by subject with teacher data
+     * @param db database
+     * @param subjectID id of subject
+     * @return Cursor containing all teachers connected to subject id
+     */
+    public static Cursor getAllBySubjectIDWithTeacher(Database db, long subjectID){
+        SQLiteDatabase dbr = db.getReadableDatabase();
+        return dbr.rawQuery(String.format(
+                "SELECT %4$s.%1$s as %1$s, %2$s " +
+                        "FROM %4$s " +
+                        "LEFT JOIN %5$s ON %4$s.%1$s=%5$s.%3$s " +
+                        "WHERE %7$s=%6$s",
+                DatabaseTableSubjectTeacher.FIELD_TEACHER_ID,
+                DatabaseTableTeacher.FIELD_NAME,
+                DatabaseTableTeacher.FIELD_TEACHER_ID,
+                DatabaseTableSubjectTeacher.TABLE_SUBJECT_TEACHER_NAME,
+                DatabaseTableTeacher.TABLE_TEACHER_NAME,
+                subjectID,
+                DatabaseTableSubject.FIELD_SUBJECT_ID
+        ),null);
+    }
+
+    /**
      * get all subjects by teacher
      * @param db database
      * @param teacherID id of teacher

@@ -18,8 +18,21 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".BlockEdit"
+        <activity
+            android:name=".BlockEdit"
             android:label="@string/edit_block_name">
+        </activity>
+        <activity android:name=".TeacherEdit">
+        </activity>
+        <activity android:name=".SubjectEdit">
+        </activity>
+        <activity android:name=".HomeworkEdit">
+        </activity>
+        <activity android:name=".CalenderActivity">
+        </activity>
+        <activity android:name=".CalendarTest">
+        </activity>
+        <activity android:name=".GetLessonActivity">
         </activity>
     </application>
 
