@@ -1,5 +1,7 @@
 package com.goddard.joel.digitalplanner;
 
+import android.database.Cursor;
+
 /**
  * Created by Joel Goddard on 01/02/2016.
  *
@@ -23,6 +25,18 @@ public class Block {
         this.startTime = startTime;
         this.length = length;
         this.day = day;
+    }
+
+    public Block(Database db, long id){
+        Cursor c = DatabaseTableBlock.getByID(db, id);
+        c.moveToFirst();
+        this.id = id;
+        startTime = c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_START_TIME));
+        length = c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_LENGTH));
+        day = c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_DAY));
+        subject = new Subject(db, c.getLong(c.getColumnIndex(DatabaseTableBlock.FIELD_SUBJECT_ID)));
+        location = new Location(db, c.getLong(c.getColumnIndex(DatabaseTableBlock.FIELD_LOCATION_ID)));
+        teacher = new Teacher(db, c.getLong(c.getColumnIndex(DatabaseTableBlock.FIELD_TEACHER_ID)));
     }
 
     public long getId() {

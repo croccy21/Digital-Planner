@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -35,19 +36,20 @@ public class DatabaseTableLesson {
      * Insets lesson into database
      * @param db database
      * @param blockID id of block lesson is in
-     * @param weekBeginning date of lesson
+     * @param date date of lesson
      * @param canceled is it canceled
      * @return id of lesson
      */
-    public static long insert(Database db, long blockID, Date weekBeginning, boolean canceled){
+    public static long insert(Database db, long blockID, Calendar date, boolean canceled){
         ContentValues values = new ContentValues();
+        date = Util.setDateToStart(date);
         values.put(FIELD_BLOCK_ID, blockID);
-        values.put(FIELD_DAY, String.valueOf(weekBeginning));
+        values.put(FIELD_DAY, date.getTimeInMillis());
         values.put(FIELD_CANCELED, canceled);
 
         SQLiteDatabase dbw = db.getWritableDatabase();
         long id = dbw.insert(TABLE_LESSON_NAME, null, values);
-        Log.d("DATABASE", String.format("New lesson with Index %1$s, Block ID: %2$s, day %3$s, canceled %4$s}", id, blockID, weekBeginning, canceled));
+        Log.d("DATABASE", String.format("New lesson with Index %1$s, Block ID: %2$s, day %3$s, canceled %4$s}", id, blockID, date, canceled));
         return id;
     }
 
@@ -56,19 +58,20 @@ public class DatabaseTableLesson {
      * @param db database
      * @param lessonID id of the lesson to update
      * @param blockID id of block lesson is in
-     * @param weekBeginning date of lesson
+     * @param date date of lesson
      * @param canceled is it canceled
      * @return id of lesson
      */
-    public static long update(Database db, long lessonID, long blockID, Date weekBeginning, boolean canceled){
+    public static long update(Database db, long lessonID, long blockID, Calendar date, boolean canceled){
         ContentValues values = new ContentValues();
+        date = Util.setDateToStart(date);
         values.put(FIELD_BLOCK_ID, blockID);
-        values.put(FIELD_DAY, String.valueOf(weekBeginning));
+        values.put(FIELD_DAY, date.getTimeInMillis());
         values.put(FIELD_CANCELED, canceled);
 
         SQLiteDatabase dbw = db.getWritableDatabase();
         long id = dbw.update(TABLE_LESSON_NAME, values, String.format("%s=%d", FIELD_LESSON_ID, lessonID), null);
-        Log.d("DATABASE", String.format("Update lesson with Index %1$s, Block ID: %2$s, day %3$s, canceled %4$s}", id, blockID, weekBeginning, canceled));
+        Log.d("DATABASE", String.format("Update lesson with Index %1$s, Block ID: %2$s, day %3$s, canceled %4$s}", id, blockID, date, canceled));
         return id;
     }
 
@@ -101,7 +104,13 @@ public class DatabaseTableLesson {
      */
     public static Cursor getByID(Database db, long id){
         SQLiteDatabase dbr = db.getReadableDatabase();
-        return dbr.query(false, TABLE_LESSON_NAME, null, String.format("%s=%d", FIELD_BLOCK_ID, id), null, null, null, null, null);
+        return dbr.query(false, TABLE_LESSON_NAME, null, String.format("%s=%d", FIELD_LESSON_ID, id), null, null, null, null, null);
+    }
+
+    public static Cursor getByBlockIDAndDate(Database db, long blockID, Calendar date){
+        SQLiteDatabase dbr = db.getReadableDatabase();
+        date = Util.setDateToStart(date);
+        return dbr.query(false, TABLE_LESSON_NAME, null, String.format("%s=%d AND %s=%d", FIELD_BLOCK_ID, blockID, FIELD_DAY, date.getTimeInMillis()), null, null, null, null, null);
     }
 
     /**
@@ -191,6 +200,33 @@ public class DatabaseTableLesson {
                 DatabaseTableLocation.TABLE_LOCATION_NAME + DatabaseTableLocation.FIELD_NAME,
                 DatabaseTableLesson.FIELD_LESSON_ID,
                 id
+        ), null);
+    }
+
+    public static Cursor getByCurrentDay(Database db){
+        Calendar calendar = Calendar.getInstance();
+        int time = calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE);
+        calendar = Util.setDateToStart(calendar);
+        long day = calendar.getTimeInMillis();
+        SQLiteDatabase dbr = db.getReadableDatabase();
+        return dbr.rawQuery(String.format(
+                "SELECT %3$s, %1$s.%4$s as %4$s, %1$s.%5$s as %5$s, %6$s " +
+                "FROM %1$S " +
+                "LEFT JOIN %2$s ON %1$s.%4$s = %2$s.%7$s " +
+                "WHERE %1$s.%5$s=%11$s " +
+                "AND %8$s<%10$s " +
+                "AND %8$s+%9$s>%10$s",
+                DatabaseTableLesson.TABLE_LESSON_NAME,
+                DatabaseTableBlock.TABLE_BLOCK_NAME,
+                DatabaseTableLesson.FIELD_LESSON_ID,
+                DatabaseTableLesson.FIELD_BLOCK_ID,
+                DatabaseTableLesson.FIELD_DAY,
+                DatabaseTableLesson.FIELD_CANCELED,
+                DatabaseTableBlock.FIELD_BLOCK_ID,
+                DatabaseTableBlock.FIELD_START_TIME,
+                DatabaseTableBlock.FIELD_LENGTH,
+                time,
+                day
         ), null);
     }
 }

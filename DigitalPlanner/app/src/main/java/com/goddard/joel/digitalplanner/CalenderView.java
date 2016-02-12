@@ -6,7 +6,9 @@ import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -28,6 +30,8 @@ public class CalenderView extends LinearLayout {
     private OnItemClickListener onItemClickListener;
 
     private String mExampleString; // TODO: use a default from R.string...
+
+    private boolean showCanceled;
 
     private TextPaint mTextPaint;
     private float mTextWidth;
@@ -139,7 +143,18 @@ public class CalenderView extends LinearLayout {
     }
 
     public void populate(){
-        list.setAdapter(new CalenderAdapter(getContext(), db, calendar));
+        CalenderAdapter adapter = new CalenderAdapter(getContext(), db, calendar);
+        adapter.setShowCanceled(showCanceled);
+        adapter.setLessonCanceledChangedListener(new CalenderAdapter.OnLessonCanceledChanged() {
+            @Override
+            public void onLessonCancelChange(View v, int position, boolean canceled) {
+                Log.d("DATABASE", String.format("position: %d", position));
+                Lesson l = (Lesson) list.getAdapter().getItem(position);
+                DatabaseTableLesson.update(db, l.getId(), l.getBlock().getId(), l.getDate(), canceled);
+                populate();
+            }
+        });
+        list.setAdapter(adapter);
         SimpleDateFormat df = new SimpleDateFormat(getResources().getString(R.string.date_button_text));
         chooseDayButton.setText(df.format(calendar.getTime()));
     }
@@ -183,5 +198,16 @@ public class CalenderView extends LinearLayout {
     public void setSelected(int itemPosition){
         selected = itemPosition;
         list.setSelection(selected);
+    }
+
+    public boolean isShowCanceled() {
+        return showCanceled;
+    }
+
+    public void setShowCanceled(boolean showCanceled) {
+        this.showCanceled = showCanceled;
+        CalenderAdapter adapter = (CalenderAdapter) list.getAdapter();
+        adapter.setShowCanceled(false);
+        list.invalidate();
     }
 }

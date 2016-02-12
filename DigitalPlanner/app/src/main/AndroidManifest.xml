@@ -34,6 +34,11 @@
         </activity>
         <activity android:name=".GetLessonActivity">
         </activity>
+        <activity
+            android:name=".HomeworkList"
+            android:label="@string/title_activity_homework_list"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>

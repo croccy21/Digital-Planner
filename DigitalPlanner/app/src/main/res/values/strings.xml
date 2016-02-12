@@ -5,6 +5,7 @@
     <string name="lesson_data_string">%1$s with %2$s at %3$s</string>
     <string name="lesson_time_string">%1$02d:%2$02d - %3$02d:%4$02d (%5$d hour %6$d minutes)</string>
     <string name="date_button_text">EEEE d MMMM yyyy</string>
+    <string name="short_date">dd/MM/yy</string>
 
     <string-array name="days_array">
         <item>Monday</item>
@@ -15,4 +16,5 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
+    <string name="title_activity_homework_list">HomeworkList</string>
 </resources>

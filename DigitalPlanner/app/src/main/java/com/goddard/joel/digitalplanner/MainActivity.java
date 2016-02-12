@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void homeworkTestClick(View view) {
+        Intent intent = new Intent(this, HomeworkList.class);
+        startActivity(intent);
     }
 
     public void calendarTestClick(View view) {

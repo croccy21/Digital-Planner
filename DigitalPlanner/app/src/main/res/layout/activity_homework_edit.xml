@@ -7,13 +7,6 @@
     tools:context="com.goddard.joel.digitalplanner.HomeworkEdit"
     android:orientation="vertical">
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/subject_spinner">
-
-    </Spinner>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,14 +17,51 @@
             android:layout_weight="1"
             android:text="LESSON SET"
             android:layout_margin="4dp"
-            android:id="@+id/btn_lesson_set"/>
+            android:id="@+id/btn_lesson_set"
+            android:onClick="lessonSetClick"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="LESSON DUE"
             android:layout_margin="4dp"
-            android:id="@+id/btn_lesson_due"/>
+            android:id="@+id/btn_lesson_due"
+            android:onClick="lessonDueClick"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No Subject Selected"
+        android:gravity="center_horizontal"
+        android:textSize="16sp"
+        android:padding="4dp"
+
+        android:id="@+id/subject_display"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:textSize="18sp"
+            android:padding="4dp"
+
+            android:id="@+id/set_time"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:textSize="18sp"
+            android:padding="4dp"
+
+            android:id="@+id/due_time"/>
     </LinearLayout>
 
     <EditText
@@ -44,11 +74,39 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:hint="Details"
         android:gravity="top"
         android:minLines="5"
         android:id="@+id/long_description"
         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:onClick="saveBtnClick"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="4dp"/>
+
+        <Button
+            android:onClick="cancelBtnClick"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="4dp"/>
+    </LinearLayout>
 
 </LinearLayout>

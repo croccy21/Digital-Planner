@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -48,12 +49,16 @@ public class DatabaseTableHomework {
      * @param shortDescription short summary of description
      * @return id of homework
      */
-    public static long insert(Database db, long lessonSet, long lessonDue, int estimatedLength, Date schelduledTime, String description, String shortDescription){
+    public static long insert(Database db, long lessonSet, long lessonDue, int estimatedLength, Calendar schelduledTime, String description, String shortDescription){
         ContentValues values = new ContentValues();
         values.put(FIELD_LESSON_SET,        lessonSet);
         values.put(FIELD_LESSON_DUE,        lessonDue);
         values.put(FIELD_ESTIMATED_LENGTH,  estimatedLength);
-        values.put(FIELD_SCHEDULED_TIME,    String.valueOf(schelduledTime));
+        long timeToSet = -1;
+        if (schelduledTime!=null){
+            timeToSet=schelduledTime.getTimeInMillis();
+        }
+        values.put(FIELD_SCHEDULED_TIME,    timeToSet);
         values.put(FIELD_DESCRIPTION,       description);
         values.put(FIELD_DESCRIPTION_SHORT, shortDescription);
 
@@ -75,12 +80,12 @@ public class DatabaseTableHomework {
      * @param shortDescription short summary of description
      * @return id of homework
      */
-    public static long update(Database db, long id, long lessonSet, long lessonDue, int estimatedLength, Date schelduledTime, String description, String shortDescription){
+    public static long update(Database db, long id, long lessonSet, long lessonDue, int estimatedLength, Calendar schelduledTime, String description, String shortDescription){
         ContentValues values = new ContentValues();
         values.put(FIELD_LESSON_SET,        lessonSet);
         values.put(FIELD_LESSON_DUE,        lessonDue);
         values.put(FIELD_ESTIMATED_LENGTH,  estimatedLength);
-        values.put(FIELD_SCHEDULED_TIME,    String.valueOf(schelduledTime));
+        values.put(FIELD_SCHEDULED_TIME,    schelduledTime.getTimeInMillis());
         values.put(FIELD_DESCRIPTION,       description);
         values.put(FIELD_DESCRIPTION_SHORT, shortDescription);
 
