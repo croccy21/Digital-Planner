@@ -2,6 +2,7 @@ package com.goddard.joel.digitalplanner;
 
 import android.database.Cursor;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -81,5 +82,17 @@ public class Lesson {
 
     public void setBlock(Database db, long blockId){
         block = new Block(db, blockId);
+    }
+
+    public ArrayList<Homework> getHomeworksDue(Database db){
+        ArrayList<Homework> homeworks = new ArrayList<>();
+        Cursor c = DatabaseTableHomework.getByLessonDue(db, getId());
+        c.moveToFirst();
+        for(int i=0;i<c.getCount();i++){
+            Homework h = new Homework(db, c.getLong(c.getColumnIndex(DatabaseTableHomework.FIELD_HOMEWORK_ID)));
+            homeworks.add(h);
+            c.moveToNext();
+        }
+        return homeworks;
     }
 }

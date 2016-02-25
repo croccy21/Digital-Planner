@@ -1,6 +1,9 @@
 package com.goddard.joel.digitalplanner;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +30,17 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //DatabaseTest.test(this);
 
+        Intent i = new Intent(this, DailyService.class);
+        i.setAction(DailyService.ACTION_SETUP);
+        startService(i);
+        Calendar c = Calendar.getInstance();
+        c = Util.setDateToStart(c);
+        c.add(Calendar.DAY_OF_YEAR, 1);
+        c.set(Calendar.MINUTE, 5);
+        PendingIntent pi = PendingIntent.getService(this, 1, i, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarm.cancel(pi);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
 
     }
 
@@ -44,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
@@ -84,7 +101,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void calendarTestClick(View view) {
-        Intent intent = new Intent(this, CalendarTest.class);
+        Intent intent = new Intent(this, CalendarActivity.class);
         startActivity(intent);
+    }
+
+    public void notificationTestClick(View view) {
+        Database db = new Database(this);
+        Block b = new Block(0, 1000, 60, Calendar.MONDAY);
+        b.setSubject(new Subject(0, "Maths"));
+        b.setTeacher(new Teacher(0, "Steve"));
+        b.setLocation(new Location(0, "A004"));
+        Lesson l = new Lesson(0, Util.setDateToStart(Calendar.getInstance()), b, false);
+        Homework h = new Homework(db, 1);
+        NewLessonNotification.notify(getApplicationContext(), l, h, 1);
     }
 }

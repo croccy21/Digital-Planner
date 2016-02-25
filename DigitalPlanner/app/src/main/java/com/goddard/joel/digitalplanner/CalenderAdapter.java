@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -22,6 +24,7 @@ import java.util.Calendar;
  * @author Joel Goddard
  */
 public class CalenderAdapter extends ArrayAdapter {
+
 
     public OnLessonCanceledChanged getLessonCanceledChangedListener() {
         return lessonCanceledChangedListener;
@@ -38,6 +41,7 @@ public class CalenderAdapter extends ArrayAdapter {
     private Database db;
     private Calendar calendar;
     private boolean showCanceled = false;
+    private boolean showHomeworks = false;
     private int p;
 
     private OnLessonCanceledChanged lessonCanceledChangedListener;
@@ -75,18 +79,25 @@ public class CalenderAdapter extends ArrayAdapter {
         }
 
         Lesson l = (Lesson) getItem(position);
+
+        View homeworkHolder = v.findViewById(R.id.lesson_homework_holder);
+        TextView homeworkMessage = (TextView) v.findViewById(R.id.lesson_homework);
+        TextView homeworkShort = (TextView) v.findViewById(R.id.lesson_homework_short);
+        TextView homeworkLong = (TextView) v.findViewById(R.id.lesson_homework_long);
+        CardView card = (CardView) v.findViewById(R.id.lesson_holder);
+        TextView time = (TextView) v.findViewById(R.id.lesson_time);
+        TextView subject = (TextView) v.findViewById(R.id.lesson_subject);
+        Switch canceledSwitch = (Switch) v.findViewById(R.id.cancel_switch);
+
         if(l!=null) {
             final Block b = l.getBlock();
             if (b != null && (!l.isCanceled() || showCanceled)) {
-                CardView card = (CardView) v.findViewById(R.id.lesson_holder);
-                TextView time = (TextView) v.findViewById(R.id.lesson_time);
-                TextView subject = (TextView) v.findViewById(R.id.lesson_subject);
-                View homeworkHolder = v.findViewById(R.id.lesson_homework_holder);
-                TextView homework = (TextView) v.findViewById(R.id.lesson_homework);
-                Switch canceledSwitch = (Switch) v.findViewById(R.id.cancel_switch);
 
                 if(card != null && l.isCanceled()){
                     card.setCardBackgroundColor(Color.argb(100, 0x80, 0x80, 0x80));
+                }
+                else if (card!=null){
+                    card.setCardBackgroundColor(Color.argb(100, 0xFF, 0xFF, 0xFF));
                 }
 
                 if (time != null) {
@@ -124,10 +135,20 @@ public class CalenderAdapter extends ArrayAdapter {
                     if(showCanceled) {
                         canceledSwitch.setVisibility(View.VISIBLE);
                         canceledSwitch.setChecked(!l.isCanceled());
-                        canceledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        canceledSwitch.setTag(position);
+                        canceledSwitch.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                lessonCanceledChangedListener.onLessonCancelChange(buttonView, position, !isChecked);
+                            public void onClick(View v) {
+                                Switch s = (Switch) v;
+                                lessonCanceledChangedListener.onLessonCancelChange(v, position, !s.isChecked());
+                            }
+                        });
+                        canceledSwitch.setOnDragListener(new View.OnDragListener() {
+                            @Override
+                            public boolean onDrag(View v, DragEvent event) {
+                                Switch s = (Switch) v;
+                                lessonCanceledChangedListener.onLessonCancelChange(v, position, !s.isChecked());
+                                return true;
                             }
                         });
                     }
@@ -135,6 +156,42 @@ public class CalenderAdapter extends ArrayAdapter {
                         canceledSwitch.setVisibility(View.GONE);
                     }
                 }
+            }
+            ArrayList<Homework> homeworks = l.getHomeworksDue(db);
+            if (homeworks.size()>0 && showHomeworks){
+                homeworkHolder.setVisibility(View.VISIBLE);
+                if(homeworks.size()==1){
+                    Homework homework = homeworks.get(0);
+                    String homeworkText = "HOMEWORK ";
+                    if(homework.isDone()){
+                        homeworkText+="DONE";
+                        homeworkLong.setVisibility(View.GONE);
+                    }
+                    else{
+                        homeworkText+="INCOMPLETE";
+                        homeworkLong.setVisibility(View.VISIBLE);
+                        homeworkLong.setText(homework.getDescription());
+                    }
+                    homeworkMessage.setText(homeworkText);
+                    homeworkShort.setVisibility(View.VISIBLE);
+                    homeworkShort.setText(homework.getShortDescription());
+                }
+                else{
+                    homeworkLong.setVisibility(View.GONE);
+                    homeworkShort.setVisibility(View.GONE);
+                    String homeworkText = String.format("%s HOMEWORKS", homeworks.size());
+                    int dones=0;
+                    for(Homework h:homeworks){
+                        if(h.isDone()){
+                            dones+=1;
+                        }
+                    }
+                    homeworkText += String.format(" (%s DONE)", dones);
+                    homeworkMessage.setText(homeworkText);
+                }
+            }
+            else{
+                homeworkHolder.setVisibility(View.GONE);
             }
         }
 
@@ -152,5 +209,13 @@ public class CalenderAdapter extends ArrayAdapter {
 
     public void setShowCanceled(boolean showCanceled) {
         this.showCanceled = showCanceled;
+    }
+
+    public boolean isShowHomeworks() {
+        return showHomeworks;
+    }
+
+    public void setShowHomeworks(boolean showHomeworks) {
+        this.showHomeworks = showHomeworks;
     }
 }

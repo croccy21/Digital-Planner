@@ -25,7 +25,7 @@ public class SubjectEdit extends AppCompatActivity {
     private static final int TYPE_TEACHER = 0;
     private static final int TYPE_LOCATION = 1;
 
-    private static final String EXTRA_ID = "id";
+    public static final String EXTRA_ID = "id";
 
     int type = 0;
 
@@ -72,6 +72,17 @@ public class SubjectEdit extends AppCompatActivity {
         Intent intent = getIntent();
         id = intent.getLongExtra(EXTRA_ID, -1);
 
+        //Gets all of the widgets from activity_subject_edit.xml
+        buttonHolder = (LinearLayout) findViewById(R.id.button_holder);
+        addItemHolder = (LinearLayout) findViewById(R.id.add_item_holder);
+        newItemHolder = (LinearLayout) findViewById(R.id.new_item_holder);
+        itemSpinner = (Spinner) findViewById(R.id.add_spinner);
+        newItemEdit = (EditText) findViewById(R.id.new_item_edit);
+        subjectNameEdit = (EditText) findViewById(R.id.subject_name_edit);
+
+        teacherList = (ListView) findViewById(R.id.subject_teacher_list);
+        locationList = (ListView) findViewById(R.id.subject_location_list);
+
         //Gets data from existing subject if an ID is passed to the layout
         if(id!=-1) {
             DatabaseTableSubject.getByID(db, id);
@@ -80,12 +91,20 @@ public class SubjectEdit extends AppCompatActivity {
             for(int i=0; i<teachers.getCount(); i++){
                 subjectTeachers.add(new Teacher(teachers.getLong(teachers.getColumnIndex(DatabaseTableSubjectTeacher.FIELD_TEACHER_ID)),
                         teachers.getString(teachers.getColumnIndex(DatabaseTableTeacher.FIELD_NAME))));
+                teachers.moveToNext();
             }
             Cursor locations = DatabaseTableSubjectLocation.getAllBySubjectIDWithLocation(db, id);
             locations.moveToFirst();
             for(int i=0; i<locations.getCount(); i++){
                 subjectLocations.add(new Location(locations.getLong(locations.getColumnIndex(DatabaseTableSubjectLocation.FIELD_LOCATION_ID)),
                         locations.getString(locations.getColumnIndex(DatabaseTableLocation.FIELD_NAME))));
+                locations.moveToNext();
+            }
+            Cursor c = DatabaseTableSubject.getByID(db, id);
+            c.moveToFirst();
+            if(c.getCount()==1) {
+                String name = c.getString(c.getColumnIndex(DatabaseTableSubject.FIELD_NAME));
+                subjectNameEdit.setText(name);
             }
         }
 
@@ -108,17 +127,6 @@ public class SubjectEdit extends AppCompatActivity {
                     cL.getString(cT.getColumnIndex(DatabaseTableLocation.FIELD_NAME)));
             cL.move(1);
         }
-
-        //Gets all of the widgets from activity_subject_edit.xml
-        buttonHolder = (LinearLayout) findViewById(R.id.button_holder);
-        addItemHolder = (LinearLayout) findViewById(R.id.add_item_holder);
-        newItemHolder = (LinearLayout) findViewById(R.id.new_item_holder);
-        itemSpinner = (Spinner) findViewById(R.id.add_spinner);
-        newItemEdit = (EditText) findViewById(R.id.new_item_edit);
-        subjectNameEdit = (EditText) findViewById(R.id.subject_name_edit);
-
-        teacherList = (ListView) findViewById(R.id.subject_teacher_list);
-        locationList = (ListView) findViewById(R.id.subject_location_list);
 
         teacherAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, packTeacher(subjectTeachers));
         teacherList.setAdapter(teacherAdapter);
@@ -486,6 +494,14 @@ public class SubjectEdit extends AppCompatActivity {
                 setSelection(SELECTION_ADD);
                 break;
             }
+        }
+    }
+
+    public void delete(View view) {
+        if(id>0){
+            DatabaseTableSubject.delete(db, id);
+            setResult(RESULT_CANCELED);
+            finish();
         }
     }
 }

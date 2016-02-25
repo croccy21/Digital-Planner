@@ -157,12 +157,12 @@ public class DatabaseTest {
         long idLesson4c = DatabaseTableLesson.insert(db, idBlockA1, Calendar.getInstance(), false);
         long idLesson5c = DatabaseTableLesson.insert(db, idBlockA2, Calendar.getInstance(), false);
 
-        long idHomework1 = DatabaseTableHomework.insert(db, idLesson1a, idLesson1b, 60, Calendar.getInstance(), "Do the homework 1", "h1");
-        long idHomework2 = DatabaseTableHomework.insert(db, idLesson2a, idLesson6a, 60, Calendar.getInstance(), "Do the homework 2", "h2");
-        long idHomework3 = DatabaseTableHomework.insert(db, idLesson2a, idLesson4b, 120, Calendar.getInstance(), "Do the homework 3", "h3");
-        long idHomework4 = DatabaseTableHomework.insert(db, idLesson3a, idLesson5b, 60, Calendar.getInstance(), "Do the homework 4", "h4");
-        long idHomework5 = DatabaseTableHomework.insert(db, idLesson1b, idLesson2c, 60, Calendar.getInstance(), "Do the homework 5", "h5");
-        long idHomework6 = DatabaseTableHomework.insert(db, idLesson3a, idLesson3c, 60, Calendar.getInstance(), "Do the homework 6", "h6");
+        long idHomework1 = DatabaseTableHomework.insert(db, idLesson1a, idLesson1b, 60, Calendar.getInstance(), "Do the homework 1", "h1", false);
+        long idHomework2 = DatabaseTableHomework.insert(db, idLesson2a, idLesson6a, 60, Calendar.getInstance(), "Do the homework 2", "h2", false);
+        long idHomework3 = DatabaseTableHomework.insert(db, idLesson2a, idLesson4b, 120, Calendar.getInstance(), "Do the homework 3", "h3", false);
+        long idHomework4 = DatabaseTableHomework.insert(db, idLesson3a, idLesson5b, 60, Calendar.getInstance(), "Do the homework 4", "h4", false);
+        long idHomework5 = DatabaseTableHomework.insert(db, idLesson1b, idLesson2c, 60, Calendar.getInstance(), "Do the homework 5", "h5", false);
+        long idHomework6 = DatabaseTableHomework.insert(db, idLesson3a, idLesson3c, 60, Calendar.getInstance(), "Do the homework 6", "h6", false);
 
         printAllTables(db);
 

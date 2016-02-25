@@ -2,6 +2,9 @@
 <manifest package="com.goddard.joel.digitalplanner"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,23 +15,16 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity
             android:name=".BlockEdit"
-            android:label="@string/edit_block_name">
+            android:label="@string/edit_block_name"
+            android:windowSoftInputMode="adjustPan">
         </activity>
-        <activity android:name=".TeacherEdit">
-        </activity>
-        <activity android:name=".SubjectEdit">
+        <activity android:name=".SubjectEdit"
+                  android:windowSoftInputMode="adjustPan">
         </activity>
         <activity android:name=".HomeworkEdit">
-        </activity>
-        <activity android:name=".CalenderActivity">
         </activity>
         <activity android:name=".CalendarTest">
         </activity>
@@ -37,6 +33,53 @@
         <activity
             android:name=".HomeworkList"
             android:label="@string/title_activity_homework_list"
+            android:theme="@style/AppTheme">
+        </activity>
+
+        <service
+            android:name=".DailyService"
+            android:exported="false">
+        </service>
+
+        <receiver
+            android:name=".AlarmSetter"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.goddard.joel.digitalplanner.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".LessonViewer"
+            android:label="@string/title_activity_lesson_viewer"
+            android:parentActivityName=".CalendarTest"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.goddard.joel.digitalplanner.CalendarTest"/>
+        </activity>
+        <activity
+            android:name=".CalendarActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SubjectList"
+            android:label="@string/title_activity_subject_list"
             android:theme="@style/AppTheme">
         </activity>
     </application>

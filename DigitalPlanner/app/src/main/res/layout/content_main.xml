@@ -42,4 +42,10 @@
         android:onClick="calendarTestClick"
         />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notification Test"
+        android:onClick="notificationTestClick"/>
+
 </LinearLayout>

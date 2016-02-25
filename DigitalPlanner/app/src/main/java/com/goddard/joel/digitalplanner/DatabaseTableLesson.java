@@ -229,4 +229,13 @@ public class DatabaseTableLesson {
                 day
         ), null);
     }
+
+
+    public static Cursor getByDay(Database db, Calendar calendar) {
+        calendar = Util.setDateToStart(calendar);
+        long date = calendar.getTimeInMillis();
+        SQLiteDatabase dbr = db.getReadableDatabase();
+        return dbr.query(false, TABLE_LESSON_NAME, null, String.format("%s=%d", FIELD_DAY, date), null, null, null, null, null);
+    }
+
 }

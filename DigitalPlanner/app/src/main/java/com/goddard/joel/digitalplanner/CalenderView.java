@@ -32,6 +32,7 @@ public class CalenderView extends LinearLayout {
     private String mExampleString; // TODO: use a default from R.string...
 
     private boolean showCanceled;
+    private boolean showHomeworks;
 
     private TextPaint mTextPaint;
     private float mTextWidth;
@@ -145,6 +146,7 @@ public class CalenderView extends LinearLayout {
     public void populate(){
         CalenderAdapter adapter = new CalenderAdapter(getContext(), db, calendar);
         adapter.setShowCanceled(showCanceled);
+        adapter.setShowHomeworks(showHomeworks);
         adapter.setLessonCanceledChangedListener(new CalenderAdapter.OnLessonCanceledChanged() {
             @Override
             public void onLessonCancelChange(View v, int position, boolean canceled) {
@@ -204,10 +206,33 @@ public class CalenderView extends LinearLayout {
         return showCanceled;
     }
 
+    /**
+     * The cancel button is not working correctly for unknown reasons
+     * @param showCanceled
+     */
     public void setShowCanceled(boolean showCanceled) {
         this.showCanceled = showCanceled;
         CalenderAdapter adapter = (CalenderAdapter) list.getAdapter();
-        adapter.setShowCanceled(false);
-        list.invalidate();
+        if(adapter!=null) {
+            adapter.setShowCanceled(showCanceled);
+            list.invalidate();
+        }
+    }
+
+    public boolean isShowHomeworks() {
+        return showHomeworks;
+    }
+
+    public void setShowHomeworks(boolean showHomeworks) {
+        this.showHomeworks = showHomeworks;
+        CalenderAdapter adapter = (CalenderAdapter) list.getAdapter();
+        if(adapter!=null) {
+            adapter.setShowHomeworks(showHomeworks);
+            list.invalidate();
+        }
+    }
+
+    public int getDay() {
+        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 }

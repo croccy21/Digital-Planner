@@ -20,6 +20,8 @@ public class Homework {
     private int estimatedLength;
     private Calendar scheduleTime;
 
+    private boolean done;
+
     public Homework(long id) {
         this.id = id;
     }
@@ -27,14 +29,20 @@ public class Homework {
     public Homework(Database db, long id){
         this.id = id;
         Cursor c = DatabaseTableHomework.getByID(db, id);
-        c.moveToFirst();
-        description = c.getString(c.getColumnIndex(DatabaseTableHomework.FIELD_DESCRIPTION));
-        shortDescription = c.getString(c.getColumnIndex(DatabaseTableHomework.FIELD_DESCRIPTION_SHORT));
-        estimatedLength = c.getInt(c.getColumnIndex(DatabaseTableHomework.FIELD_ESTIMATED_LENGTH));
-        scheduleTime = Calendar.getInstance();
-        scheduleTime.setTimeInMillis(c.getLong(c.getColumnIndex(DatabaseTableHomework.FIELD_SCHEDULED_TIME)));
-        setLessonDue(db, c.getLong(c.getColumnIndex(DatabaseTableHomework.FIELD_LESSON_DUE)));
-        setLessonSet(db, c.getLong(c.getColumnIndex(DatabaseTableHomework.FIELD_LESSON_SET)));
+        if(c.getCount()>0) {
+            c.moveToFirst();
+            description = c.getString(c.getColumnIndex(DatabaseTableHomework.FIELD_DESCRIPTION));
+            shortDescription = c.getString(c.getColumnIndex(DatabaseTableHomework.FIELD_DESCRIPTION_SHORT));
+            estimatedLength = c.getInt(c.getColumnIndex(DatabaseTableHomework.FIELD_ESTIMATED_LENGTH));
+            scheduleTime = Calendar.getInstance();
+            scheduleTime.setTimeInMillis(c.getLong(c.getColumnIndex(DatabaseTableHomework.FIELD_SCHEDULED_TIME)));
+            done = c.getInt(c.getColumnIndex(DatabaseTableHomework.FIELD_DONE)) > 0;
+            setLessonDue(db, c.getLong(c.getColumnIndex(DatabaseTableHomework.FIELD_LESSON_DUE)));
+            setLessonSet(db, c.getLong(c.getColumnIndex(DatabaseTableHomework.FIELD_LESSON_SET)));
+        }
+        else {
+            this.id = -1;
+        }
     }
 
     public long getId() {
@@ -107,5 +115,13 @@ public class Homework {
 
     public void setScheduleTime(Calendar scheduleTime) {
         this.scheduleTime = scheduleTime;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
     }
 }

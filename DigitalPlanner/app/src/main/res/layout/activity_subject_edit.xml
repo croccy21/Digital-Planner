@@ -42,15 +42,19 @@
                     android:textColorHint="#f0f0d0"
                     />
 
-                <CheckBox
-                    android:id="@+id/colour_picker"
+                <ImageButton
+                    android:id="@+id/delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_alignRight="@id/subject_name_edit"
+                    android:src="@drawable/ic_action_delete"
+                    android:padding="4dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:onClick="delete"
                     >
 
-                </CheckBox>
+                </ImageButton>
             </LinearLayout>
 
             <LinearLayout

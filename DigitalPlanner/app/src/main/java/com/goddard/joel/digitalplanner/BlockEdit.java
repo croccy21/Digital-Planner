@@ -1,7 +1,10 @@
 package com.goddard.joel.digitalplanner;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +30,7 @@ public class BlockEdit extends AppCompatActivity {
     public static final String EXTRA_LENGTH = "length";
     public static final String EXTRA_DAY = "day";
 
-    private int id = -1;
+    private long id = -1;
     private int startTime = -1;
     private int endTime = -1;
     private int length = -1;
@@ -42,6 +45,8 @@ public class BlockEdit extends AppCompatActivity {
 
     private Subject[] allSubjects;
     private Subject currentSubject;
+    private Location currentLocation;
+    private Teacher currentTeacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,20 +70,91 @@ public class BlockEdit extends AppCompatActivity {
 
         //Get ID passed from previous activity
         Intent intent = getIntent();
-        id = intent.getIntExtra(EXTRA_ID, -1);
-
+        id = intent.getLongExtra(EXTRA_ID, -1);
+        Log.d("DATABASE", "ID received = " + id);
         //If using existing block populate from database
         if (id>=0){
             //Get data from database
             Cursor c = DatabaseTableBlock.getByID(db, id);
+            c.moveToFirst();
             startTime = c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_START_TIME));
             length = c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_LENGTH));
             endTime=startTime+length;
-            day=c.getString(c.getColumnIndex(DatabaseTableBlock.FIELD_DAY));
-
+            currentSubject = new Subject(db, c.getLong(c.getColumnIndex(DatabaseTableBlock.FIELD_SUBJECT_ID)));
+            currentTeacher = new Teacher(db, c.getLong(c.getColumnIndex(DatabaseTableBlock.FIELD_SUBJECT_ID)));
+            currentLocation = new Location(db, c.getLong(c.getColumnIndex(DatabaseTableBlock.FIELD_SUBJECT_ID)));
+            int d =c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_DAY));
+            switch (d){
+                case Calendar.MONDAY:{
+                    day = "Monday";
+                    break;
+                }
+                case Calendar.TUESDAY:{
+                    day = "Tuesday";
+                    break;
+                }
+                case Calendar.WEDNESDAY:{
+                    day = "Wednesday";
+                    break;
+                }
+                case Calendar.THURSDAY:{
+                    day = "Thursday";
+                    break;
+                }
+                case Calendar.FRIDAY:{
+                    day = "Friday";
+                    break;
+                }
+                case Calendar.SATURDAY:{
+                    day = "Saturday";
+                    break;
+                }
+                case Calendar.SUNDAY:{
+                    day = "Sunday";
+                    break;
+                }
+            }
             //Populate widgets
             startBox.setText(String.format("%02d:%02d", startTime/60, startTime%60));
             endBox.setText(String.format("%02d:%02d", endTime/60, endTime%60));
+            int spinnerPosition = adapter.getPosition(day);
+            if (spinnerPosition>=0 && spinnerPosition<adapter.getCount()){
+                spinner.setSelection(spinnerPosition);
+            }
+
+        }
+        else{
+            int d = intent.getIntExtra(EXTRA_DAY, -1);
+            switch (d){
+                case Calendar.MONDAY:{
+                    day = "Monday";
+                    break;
+                }
+                case Calendar.TUESDAY:{
+                    day = "Tuesday";
+                    break;
+                }
+                case Calendar.WEDNESDAY:{
+                    day = "Wednesday";
+                    break;
+                }
+                case Calendar.THURSDAY:{
+                    day = "Thursday";
+                    break;
+                }
+                case Calendar.FRIDAY:{
+                    day = "Friday";
+                    break;
+                }
+                case Calendar.SATURDAY:{
+                    day = "Saturday";
+                    break;
+                }
+                case Calendar.SUNDAY:{
+                    day = "Sunday";
+                    break;
+                }
+            }
             int spinnerPosition = adapter.getPosition(day);
             if (spinnerPosition>=0 && spinnerPosition<adapter.getCount()){
                 spinner.setSelection(spinnerPosition);
@@ -127,6 +203,12 @@ public class BlockEdit extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, names);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         subjectSpinner.setAdapter(adapter);
+        if(currentSubject!=null) {
+            int spinnerPosition = adapter.getPosition(currentSubject.getName());
+            if (spinnerPosition >= 0 && spinnerPosition < adapter.getCount()) {
+                subjectSpinner.setSelection(spinnerPosition);
+            }
+        }
     }
 
     private void populateTeacherSpinner(List<String> teachers){
@@ -134,6 +216,12 @@ public class BlockEdit extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, teachers);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         teacherSpinner.setAdapter(adapter);
+        if(currentTeacher!=null) {
+            int spinnerPosition = adapter.getPosition(currentTeacher.getName());
+            if (spinnerPosition >= 0 && spinnerPosition < adapter.getCount()) {
+                teacherSpinner.setSelection(spinnerPosition);
+            }
+        }
     }
 
     private void populateLocationSpinner(List<String> locations){
@@ -141,6 +229,12 @@ public class BlockEdit extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locations);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationSpinner.setAdapter(adapter);
+        if(currentLocation!=null) {
+            int spinnerPosition = adapter.getPosition(currentLocation.getName());
+            if (spinnerPosition >= 0 && spinnerPosition < adapter.getCount()) {
+                locationSpinner.setSelection(spinnerPosition);
+            }
+        }
     }
 
     public void startTimeClick(View view) {
@@ -181,8 +275,6 @@ public class BlockEdit extends AppCompatActivity {
 
     public void saveBtnClick(View view) {
         long subjectId;
-        long currentTeacher;
-        long currentLocation;
 
         if(currentSubject==null){
             return;
@@ -194,14 +286,14 @@ public class BlockEdit extends AppCompatActivity {
         if(teacherPos<0){
             return;
         }
-        currentTeacher = currentSubject.getSubjectTeachers().get(teacherPos).getId();
+        currentTeacher = currentSubject.getSubjectTeachers().get(teacherPos);
         Log.d("DATABASE", String.valueOf(currentTeacher));
 
         int locationPos = locationSpinner.getSelectedItemPosition() - 1;
         if(locationPos<0){
             return;
         }
-        currentLocation = currentSubject.getSubjectLocations().get(locationPos).getId();
+        currentLocation = currentSubject.getSubjectLocations().get(locationPos);
         Log.d("DATABASE", String.valueOf(currentLocation));
 
 
@@ -237,7 +329,23 @@ public class BlockEdit extends AppCompatActivity {
             return;
         }
 
-        DatabaseTableBlock.insert(db, dayID, startTime, length, subjectId, currentTeacher, currentLocation);
+        DatabaseTableBlock.insert(db, dayID, startTime, length, subjectId, currentTeacher.getId(), currentLocation.getId());
+
+        Calendar today = Calendar.getInstance();
+
+        if(today.get(Calendar.DAY_OF_WEEK)==dayID){
+            Intent i = new Intent(this, DailyService.class);
+            i.setAction(DailyService.ACTION_SETUP);
+            startService(i);
+            Calendar c = Calendar.getInstance();
+            c = Util.setDateToStart(c);
+            c.add(Calendar.DAY_OF_YEAR, 1);
+            c.set(Calendar.MINUTE, 5);
+            PendingIntent pi = PendingIntent.getService(this, 1, i, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+            alarm.cancel(pi);
+            alarm.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
+        }
 
         Intent result = new Intent();
         result.putExtra(EXTRA_ID, id);
@@ -248,5 +356,10 @@ public class BlockEdit extends AppCompatActivity {
     public void cancelBtnClick(View view) {
         setResult(Activity.RESULT_CANCELED);
         finish();
+    }
+
+    public void subject_button(View view) {
+        Intent i = new Intent(this, SubjectList.class);
+        startActivity(i);
     }
 }

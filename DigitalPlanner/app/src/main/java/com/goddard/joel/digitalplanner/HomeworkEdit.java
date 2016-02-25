@@ -5,7 +5,9 @@ import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -16,12 +18,14 @@ public class HomeworkEdit extends AppCompatActivity {
     private static final int REQUEST_CODE_SET = 1;
     private static final int REQUEST_CODE_DUE = 2;
     public static final String EXTRA_ID = "homework id";
-    Homework homework;
+    public static final String EXTRA_SET_LESSON = "lesson set id";
+    private Homework homework;
     TextView subject;
     TextView setDay;
     TextView dueDay;
     EditText descriptionShort;
     EditText description;
+    Switch done;
     private Database db;
     private Calendar calendar;
 
@@ -37,9 +41,23 @@ public class HomeworkEdit extends AppCompatActivity {
         dueDay = (TextView) findViewById(R.id.due_time);
         description = (EditText) findViewById(R.id.long_description);
         descriptionShort = (EditText) findViewById(R.id.short_description);
+        done = (Switch) findViewById(R.id.done_switch);
+        done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    done.setText("Done");
+                }
+                else{
+                    done.setText("Not Done");
+                }
+                homework.setDone(isChecked);
+            }
+        });
 
         Intent i = getIntent();
         long id = i.getLongExtra(EXTRA_ID, -1);
+        long lessonSetId = i.getLongExtra(EXTRA_SET_LESSON, -1);
 
         if(id>=0){
             homework = new Homework(db, id);
@@ -47,20 +65,27 @@ public class HomeworkEdit extends AppCompatActivity {
             drawLessonDue();
             description.setText(homework.getDescription());
             descriptionShort.setText(homework.getShortDescription());
+            done.setChecked(homework.isDone());
         }
         else{
             homework = new Homework(-1);
-            Cursor c = DatabaseTableLesson.getByCurrentDay(db);
-            if (c.getCount()==1){
-                c.moveToFirst();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(c.getLong(c.getColumnIndex(DatabaseTableLesson.FIELD_DAY)));
-                homework.setLessonSet(new Lesson(
-                        c.getLong(c.getColumnIndex(DatabaseTableLesson.FIELD_LESSON_ID)),
-                        calendar,
-                        new Block(db, c.getLong(c.getColumnIndex(DatabaseTableLesson.FIELD_BLOCK_ID))),
-                        c.getInt(c.getColumnIndex(DatabaseTableLesson.FIELD_CANCELED))>0
-                ));
+            if(lessonSetId<0) {
+                Cursor c = DatabaseTableLesson.getByCurrentDay(db);
+                if (c.getCount() == 1) {
+                    c.moveToFirst();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(c.getLong(c.getColumnIndex(DatabaseTableLesson.FIELD_DAY)));
+                    homework.setLessonSet(new Lesson(
+                            c.getLong(c.getColumnIndex(DatabaseTableLesson.FIELD_LESSON_ID)),
+                            calendar,
+                            new Block(db, c.getLong(c.getColumnIndex(DatabaseTableLesson.FIELD_BLOCK_ID))),
+                            c.getInt(c.getColumnIndex(DatabaseTableLesson.FIELD_CANCELED)) > 0
+                    ));
+                    drawLessonSet();
+                }
+            }
+            else{
+                homework.setLessonSet(db, lessonSetId);
                 drawLessonSet();
             }
         }
@@ -132,7 +157,8 @@ public class HomeworkEdit extends AppCompatActivity {
                     homework.getEstimatedLength(),
                     homework.getScheduleTime(),
                     homework.getDescription(),
-                    homework.getShortDescription()
+                    homework.getShortDescription(),
+                    homework.isDone()
             );
             homework.setId(id);
         }
@@ -143,7 +169,8 @@ public class HomeworkEdit extends AppCompatActivity {
                     homework.getEstimatedLength(),
                     homework.getScheduleTime(),
                     homework.getDescription(),
-                    homework.getShortDescription()
+                    homework.getShortDescription(),
+                    homework.isDone()
             );
         }
         i.putExtra(EXTRA_ID, homework.getId());
