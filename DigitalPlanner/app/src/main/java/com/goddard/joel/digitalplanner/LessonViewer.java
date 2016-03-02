@@ -27,6 +27,7 @@ import java.util.Calendar;
 
 public class LessonViewer extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_REDRAW = 1;
     public static String EXTRA_ID = "extra id";
 
     private Lesson l;
@@ -41,7 +42,7 @@ public class LessonViewer extends AppCompatActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent i = new Intent(getApplicationContext(), HomeworkEdit.class);
             i.putExtra(HomeworkEdit.EXTRA_ID, id);
-            startActivity(i);
+            startActivityForResult(i, REQUEST_CODE_REDRAW);
         }
     };
 
@@ -74,7 +75,7 @@ public class LessonViewer extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), HomeworkEdit.class);
                 i.putExtra(HomeworkEdit.EXTRA_SET_LESSON, l.getId());
-                startActivity(i);
+                startActivityForResult(i, REQUEST_CODE_REDRAW);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -101,10 +102,10 @@ public class LessonViewer extends AppCompatActivity {
             Intent i = new Intent(this, BlockEdit.class);
             Log.d("DATABASE", "Id placed " + l.getBlock().getId());
             i.putExtra(BlockEdit.EXTRA_ID, l.getBlock().getId());
-            startActivity(i);
+            startActivityForResult(i, REQUEST_CODE_REDRAW);
         }
         if (id == R.id.action_delete){
-            DatabaseTableLesson.delete(db, l.getId());
+            DatabaseTableBlock.delete(db, l.getBlock().getId());
             setResult(RESULT_CANCELED);
             finish();
         }
@@ -126,6 +127,7 @@ public class LessonViewer extends AppCompatActivity {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     l.setCanceled(!isChecked);
+                    DatabaseTableLesson.update(db, l.getId(), l.getBlock().getId(), l.getDate(), l.isCanceled());
                 }
             });
 
@@ -138,6 +140,18 @@ public class LessonViewer extends AppCompatActivity {
             homeworksSet.setOnItemClickListener(homeworkClickListener);
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CODE_REDRAW) {
+            Cursor dueCursor = DatabaseTableHomework.getByLessonDue(db, l.getId());
+            homeworksDue.setAdapter(new HomeworkCursorAdapter(this, dueCursor));
+
+            Cursor setCursor = DatabaseTableHomework.getByLessonSet(db, l.getId());
+            homeworksSet.setAdapter(new HomeworkCursorAdapter(this, setCursor));
+        }
     }
 
     private class HomeworkCursorAdapter extends ArrayAdapter {

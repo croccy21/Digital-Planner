@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 public class SubjectList extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_REDRAW = 1;
     private ListView l;
 
     @Override
@@ -32,7 +33,7 @@ public class SubjectList extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), SubjectEdit.class);
-                startActivity(i);
+                startActivityForResult(i, REQUEST_CODE_REDRAW);
             }
         });
 
@@ -43,7 +44,7 @@ public class SubjectList extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getApplicationContext(), SubjectEdit.class);
                 i.putExtra(SubjectEdit.EXTRA_ID, id);
-                startActivity(i);
+                startActivityForResult(i, REQUEST_CODE_REDRAW);
             }
         });
     }
@@ -87,4 +88,12 @@ public class SubjectList extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CODE_REDRAW){
+            l.setAdapter(new SubjectAdapter(this));
+            l.invalidate();
+        }
+    }
 }

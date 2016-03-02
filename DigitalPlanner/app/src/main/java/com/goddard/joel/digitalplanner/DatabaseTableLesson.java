@@ -16,9 +16,9 @@ import java.util.Date;
 public class DatabaseTableLesson {
     public static String TABLE_LESSON_NAME =       "lessons";
     public static String FIELD_LESSON_ID =         "lessonID";
-    public static String FIELD_BLOCK_ID =           "blockID";
+    public static String FIELD_BLOCK_ID =          "blockID";
     public static String FIELD_DAY =               "day";
-    public static String FIELD_CANCELED =           "canceled";//1 for canceled or 0 for not canceled
+    public static String FIELD_CANCELED =          "canceled";//1 for canceled or 0 for not canceled
 
     /**
      * @return command to create the table

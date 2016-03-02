@@ -134,21 +134,13 @@ public class CalenderAdapter extends ArrayAdapter {
                 if(canceledSwitch!=null){
                     if(showCanceled) {
                         canceledSwitch.setVisibility(View.VISIBLE);
+                        canceledSwitch.setOnCheckedChangeListener(null);
                         canceledSwitch.setChecked(!l.isCanceled());
                         canceledSwitch.setTag(position);
-                        canceledSwitch.setOnClickListener(new View.OnClickListener() {
+                        canceledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
-                            public void onClick(View v) {
-                                Switch s = (Switch) v;
-                                lessonCanceledChangedListener.onLessonCancelChange(v, position, !s.isChecked());
-                            }
-                        });
-                        canceledSwitch.setOnDragListener(new View.OnDragListener() {
-                            @Override
-                            public boolean onDrag(View v, DragEvent event) {
-                                Switch s = (Switch) v;
-                                lessonCanceledChangedListener.onLessonCancelChange(v, position, !s.isChecked());
-                                return true;
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                lessonCanceledChangedListener.onLessonCancelChange(buttonView, position, !isChecked);
                             }
                         });
                     }
@@ -169,8 +161,13 @@ public class CalenderAdapter extends ArrayAdapter {
                     }
                     else{
                         homeworkText+="INCOMPLETE";
-                        homeworkLong.setVisibility(View.VISIBLE);
-                        homeworkLong.setText(homework.getDescription());
+                        if(homework.getDescription().isEmpty()){
+                            homeworkLong.setVisibility(View.GONE);
+                        }
+                        else{
+                            homeworkLong.setVisibility(View.VISIBLE);
+                            homeworkLong.setText(homework.getDescription());
+                        }
                     }
                     homeworkMessage.setText(homeworkText);
                     homeworkShort.setVisibility(View.VISIBLE);

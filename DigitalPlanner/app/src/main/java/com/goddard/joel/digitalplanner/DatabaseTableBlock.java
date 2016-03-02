@@ -58,7 +58,7 @@ public class DatabaseTableBlock {
         values.put(FIELD_LOCATION_ID, locationID);
 
         SQLiteDatabase dbw = db.getWritableDatabase();
-        long id = dbw.insert(TABLE_BLOCK_NAME, null, values);
+        long id = dbw.insert(TABLE_BLOCK_NAME, null, values);//This function automatically sanitizes input
         Log.d("DATABASE", String.format("New block with Index %1$s, Day: %2$s, startTime %3$s, length %4$s, subjectID %5$s, teacher %6$s, location %7$s",
                 id, day, startTime, length, subjectID, teacherID, locationID));
         return id;
@@ -86,7 +86,7 @@ public class DatabaseTableBlock {
         values.put(FIELD_LOCATION_ID, locationID);
 
         SQLiteDatabase dbw = db.getWritableDatabase();
-        long idr = dbw.update(TABLE_BLOCK_NAME, values, String.format("%s=%d", FIELD_BLOCK_ID, id), null);
+        long idr = dbw.update(TABLE_BLOCK_NAME, values, String.format("%s=%d", FIELD_BLOCK_ID, id), null);//This function automatically sanitizes input
         Log.d("DATABASE", String.format("Update block with Index %1$s, Day: %2$s, startTime %3$s, length %4$s}", id, day, startTime, length));
         return idr;
     }

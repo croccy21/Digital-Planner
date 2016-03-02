@@ -1,9 +1,11 @@
 package com.goddard.joel.digitalplanner;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -11,13 +13,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
+import java.util.Calendar;
+
 public class CalendarActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_REDRAW = 1;
     private Database db;
     private CalenderView c;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DatabaseTest.test(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -35,7 +41,7 @@ public class CalendarActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getApplicationContext(), LessonViewer.class);
                 i.putExtra(LessonViewer.EXTRA_ID, id);
-                startActivity(i);
+                startActivityForResult(i, REQUEST_CODE_REDRAW);
             }
         });
 
@@ -45,9 +51,21 @@ public class CalendarActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), BlockEdit.class);
                 i.putExtra(BlockEdit.EXTRA_DAY, c.getDay());
-                startActivity(i);
+                startActivityForResult(i, REQUEST_CODE_REDRAW);
             }
         });
+
+        Intent i = new Intent(this, DailyService.class);
+        i.setAction(DailyService.ACTION_SETUP);
+        Calendar c = Calendar.getInstance();
+        c = Util.setDateToStart(c);
+        c.add(Calendar.DAY_OF_YEAR, 1);
+        c.set(Calendar.MINUTE, 5);
+        PendingIntent pi = PendingIntent.getService(this, 1, i, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarm.cancel(pi);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
+        startService(i);
     }
 
     @Override
@@ -67,11 +85,11 @@ public class CalendarActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_homework) {
             Intent i = new Intent(this, HomeworkList.class);
-            startActivity(i);
+            startActivityForResult(i, REQUEST_CODE_REDRAW);
         }
         if(id == R.id.action_subjects){
             Intent i = new Intent(this, SubjectList.class);
-            startActivity(i);
+            startActivityForResult(i, REQUEST_CODE_REDRAW);
         }
         if (id == R.id.action_settings){
             Intent i = new Intent(this, SettingsActivity.class);
@@ -79,5 +97,13 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CODE_REDRAW){
+            c.populate();
+        }
     }
 }

@@ -2,7 +2,7 @@
     <string name="app_name">Digital Planner</string>
     <string name="action_settings">Settings</string>
     <string name="edit_block_name">Edit Block</string>
-    <string name="lesson_data_string">%1$s with %2$s at %3$s</string>
+    <string name="lesson_data_string">%1$s with %2$s in %3$s</string>
     <string name="lesson_time_string">%1$02d:%2$02d - %3$02d:%4$02d (%5$d hours %6$d minutes)</string>
     <string name="date_button_text">EEEE d MMMM yyyy</string>
     <string name="short_date">dd/MM/yy</string>

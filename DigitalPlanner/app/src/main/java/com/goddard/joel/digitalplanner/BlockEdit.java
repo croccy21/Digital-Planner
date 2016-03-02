@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,9 +64,9 @@ public class BlockEdit extends AppCompatActivity {
         teacherSpinner = (Spinner) findViewById(R.id.block_teacher);
         locationSpinner = (Spinner) findViewById(R.id.block_location);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getApplicationContext(),
                 R.array.days_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
         //Get ID passed from previous activity
@@ -276,26 +277,18 @@ public class BlockEdit extends AppCompatActivity {
     public void saveBtnClick(View view) {
         long subjectId;
 
-        if(currentSubject==null){
+        if(startTime<0){
+            Toast.makeText(this, "Please set start time", Toast.LENGTH_SHORT).show();
             return;
         }
-        subjectId=currentSubject.getId();
-        Log.d("DATABASE", String.valueOf(subjectId));
-
-        int teacherPos = teacherSpinner.getSelectedItemPosition() - 1;
-        if(teacherPos<0){
+        if(endTime<0){
+            Toast.makeText(this, "Please set end time", Toast.LENGTH_SHORT).show();
             return;
         }
-        currentTeacher = currentSubject.getSubjectTeachers().get(teacherPos);
-        Log.d("DATABASE", String.valueOf(currentTeacher));
-
-        int locationPos = locationSpinner.getSelectedItemPosition() - 1;
-        if(locationPos<0){
+        if(length<0){
+            Toast.makeText(this, "End time cannot be before start time", Toast.LENGTH_SHORT).show();
             return;
         }
-        currentLocation = currentSubject.getSubjectLocations().get(locationPos);
-        Log.d("DATABASE", String.valueOf(currentLocation));
-
 
         day = (String) spinner.getSelectedItem();
         int dayID;
@@ -322,21 +315,45 @@ public class BlockEdit extends AppCompatActivity {
             dayID = Calendar.SUNDAY;
         }
         else{
+            Toast.makeText(this, "No Day Selected", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(startTime<0 || endTime<0 || length<0){
+        if(currentSubject==null){
+            Toast.makeText(this, "No Subject Selected", Toast.LENGTH_SHORT).show();
             return;
         }
+        subjectId=currentSubject.getId();
+        Log.d("DATABASE", String.valueOf(subjectId));
 
-        DatabaseTableBlock.insert(db, dayID, startTime, length, subjectId, currentTeacher.getId(), currentLocation.getId());
+        int teacherPos = teacherSpinner.getSelectedItemPosition() - 1;
+        if(teacherPos<0){
+            Toast.makeText(this, "No Teacher Selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        currentTeacher = currentSubject.getSubjectTeachers().get(teacherPos);
+        Log.d("DATABASE", String.valueOf(currentTeacher));
+
+        int locationPos = locationSpinner.getSelectedItemPosition() - 1;
+        if(locationPos<0){
+            Toast.makeText(this, "No Location Selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        currentLocation = currentSubject.getSubjectLocations().get(locationPos);
+        Log.d("DATABASE", String.valueOf(currentLocation));
+
+        if(id>=0){
+            DatabaseTableBlock.update(db, id, dayID, startTime, length, subjectId, currentTeacher.getId(), currentLocation.getId());
+        }
+        else {
+            DatabaseTableBlock.insert(db, dayID, startTime, length, subjectId, currentTeacher.getId(), currentLocation.getId());
+        }
 
         Calendar today = Calendar.getInstance();
 
         if(today.get(Calendar.DAY_OF_WEEK)==dayID){
             Intent i = new Intent(this, DailyService.class);
             i.setAction(DailyService.ACTION_SETUP);
-            startService(i);
             Calendar c = Calendar.getInstance();
             c = Util.setDateToStart(c);
             c.add(Calendar.DAY_OF_YEAR, 1);
@@ -345,6 +362,7 @@ public class BlockEdit extends AppCompatActivity {
             AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
             alarm.cancel(pi);
             alarm.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
+            startService(i);
         }
 
         Intent result = new Intent();

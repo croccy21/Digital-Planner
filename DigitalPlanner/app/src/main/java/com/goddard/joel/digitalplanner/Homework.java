@@ -109,8 +109,8 @@ public class Homework {
         this.estimatedLength = estimatedLength;
     }
 
-    public Calendar getScheduleTime() {
-        return scheduleTime;
+    public long getScheduleTime() {
+        return scheduleTime.getTimeInMillis();
     }
 
     public void setScheduleTime(Calendar scheduleTime) {

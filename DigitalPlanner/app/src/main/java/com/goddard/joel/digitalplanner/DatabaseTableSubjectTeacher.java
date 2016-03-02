@@ -81,6 +81,16 @@ public class DatabaseTableSubjectTeacher {
     }
 
     /**
+     * Get all subjectTeachers
+     * @param db database
+     * @return Cursor containing all teachers connected to subject id
+     */
+    public static Cursor getAll(Database db){
+        SQLiteDatabase dbr = db.getReadableDatabase();
+        return dbr.query(false, TABLE_SUBJECT_TEACHER_NAME, null, null, null, null, null, null, null);
+    }
+
+    /**
      * Get all teachers by subject
      * @param db database
      * @param subjectID id of subject
@@ -120,7 +130,7 @@ public class DatabaseTableSubjectTeacher {
      * @param teacherID id of teacher
      * @return curor containing all subjects connected to teacher id
      */
-    public static Cursor getAllByteacherID(Database db, long teacherID){
+    public static Cursor getAllByTeacherID(Database db, long teacherID){
         SQLiteDatabase dbr = db.getReadableDatabase();
         return dbr.query(false, TABLE_SUBJECT_TEACHER_NAME, null, String.format("%s=%d", FIELD_TEACHER_ID, teacherID), null, null, null, null, null);
     }

@@ -26,8 +26,6 @@
         </activity>
         <activity android:name=".HomeworkEdit">
         </activity>
-        <activity android:name=".CalendarTest">
-        </activity>
         <activity android:name=".GetLessonActivity">
         </activity>
         <activity
@@ -61,11 +59,11 @@
         <activity
             android:name=".LessonViewer"
             android:label="@string/title_activity_lesson_viewer"
-            android:parentActivityName=".CalendarTest"
+            android:parentActivityName=".CalendarActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.goddard.joel.digitalplanner.CalendarTest"/>
+                android:value="com.goddard.joel.digitalplanner.CalendarActivity"/>
         </activity>
         <activity
             android:name=".CalendarActivity"

@@ -81,6 +81,16 @@ public class DatabaseTableSubjectLocation {
     }
 
     /**
+     * Get all subjectLocations
+     * @param db database
+     * @return Cursor containing all teachers connected to subject id
+     */
+    public static Cursor getAll(Database db){
+        SQLiteDatabase dbr = db.getReadableDatabase();
+        return dbr.query(false, TABLE_SUBJECT_LOCATION_NAME, null, null, null, null, null, null, null);
+    }
+
+    /**
      * Get all locations by subject
      * @param db database
      * @param subjectID id of subject

@@ -52,22 +52,18 @@ public class DatabaseTableHomework {
      * @param done has the homework been done
      * @return id of homework
      */
-    public static long insert(Database db, long lessonSet, long lessonDue, int estimatedLength, Calendar schelduledTime, String description, String shortDescription, boolean done){
+    public static long insert(Database db, long lessonSet, long lessonDue, int estimatedLength, long schelduledTime, String description, String shortDescription, boolean done){
         ContentValues values = new ContentValues();
         values.put(FIELD_LESSON_SET,        lessonSet);
         values.put(FIELD_LESSON_DUE,        lessonDue);
         values.put(FIELD_ESTIMATED_LENGTH,  estimatedLength);
-        long timeToSet = -1;
-        if (schelduledTime!=null){
-            timeToSet=schelduledTime.getTimeInMillis();
-        }
-        values.put(FIELD_SCHEDULED_TIME,    timeToSet);
+        values.put(FIELD_SCHEDULED_TIME,    schelduledTime);
         values.put(FIELD_DESCRIPTION,       description);
         values.put(FIELD_DESCRIPTION_SHORT, shortDescription);
         values.put(FIELD_DONE,              done);
 
         SQLiteDatabase dbw = db.getWritableDatabase();
-        long id = dbw.insert(TABLE_HOMEWORK_NAME, null, values);
+        long id = dbw.insert(TABLE_HOMEWORK_NAME, null, values);//This function automatically sanitizes input
         Log.d("DATABASE", String.format("New homework with Index %1$s, lesson set: %2$s, lesson due:%3$s, estimated length:%4$s, scheduled time:%5$s, description:%6$s, short description:%7$s}", id, lessonSet, lessonDue, estimatedLength, schelduledTime, description, shortDescription));
         return id;
     }
@@ -84,18 +80,18 @@ public class DatabaseTableHomework {
      * @param shortDescription short summary of description
      * @return id of homework
      */
-    public static long update(Database db, long id, long lessonSet, long lessonDue, int estimatedLength, Calendar schelduledTime, String description, String shortDescription, boolean done){
+    public static long update(Database db, long id, long lessonSet, long lessonDue, int estimatedLength, long schelduledTime, String description, String shortDescription, boolean done){
         ContentValues values = new ContentValues();
         values.put(FIELD_LESSON_SET,        lessonSet);
         values.put(FIELD_LESSON_DUE,        lessonDue);
         values.put(FIELD_ESTIMATED_LENGTH,  estimatedLength);
-        values.put(FIELD_SCHEDULED_TIME,    schelduledTime.getTimeInMillis());
+        values.put(FIELD_SCHEDULED_TIME,    schelduledTime);
         values.put(FIELD_DESCRIPTION,       description);
         values.put(FIELD_DESCRIPTION_SHORT, shortDescription);
         values.put(FIELD_DONE,              done);
 
         SQLiteDatabase dbw = db.getWritableDatabase();
-        long idr = dbw.update(TABLE_HOMEWORK_NAME, values, String.format("%s=%d", FIELD_HOMEWORK_ID, id), null);
+        long idr = dbw.update(TABLE_HOMEWORK_NAME, values, String.format("%s=%d", FIELD_HOMEWORK_ID, id), null);//This function automatically sanitizes input
         Log.d("DATABASE", String.format("Update homework with Index %1$s, lesson set: %2$s, lesson due:%3$s, estimated length:%4$s, scheduled time:%5$s, description:%6$s, short description:%7$s}", id, lessonSet, lessonDue, estimatedLength, schelduledTime, description, shortDescription));
         return idr;
     }

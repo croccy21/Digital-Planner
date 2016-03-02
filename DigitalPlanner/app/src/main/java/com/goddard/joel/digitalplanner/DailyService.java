@@ -50,6 +50,11 @@ public class DailyService extends IntentService {
         Log.d("Notification", "setup notification");
         Database db = new Database(this);
         Calendar calendar = Calendar.getInstance();
+
+        Calendar twoWeeksPast = Calendar.getInstance();
+        twoWeeksPast = Util.setDateToStart(twoWeeksPast);
+        twoWeeksPast.add(Calendar.WEEK_OF_YEAR, -2);
+
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         Cursor c = DatabaseTableBlock.getByDay(db, day);
         c.moveToFirst();
@@ -74,6 +79,14 @@ public class DailyService extends IntentService {
             }
             else{
                 Log.d("Notification", "Notification " + l.getId() + " canceled: not scheduling");
+            }
+
+            //Delete lesson after 2 weeks
+            Cursor cOld = DatabaseTableLesson.getByBlockIDAndDate(db, c.getLong(c.getColumnIndex(DatabaseTableBlock.FIELD_BLOCK_ID)), twoWeeksPast);
+            cOld.moveToFirst();
+            if(cOld.getCount()==1){
+                long oldId = cOld.getLong(cOld.getColumnIndex(DatabaseTableLesson.FIELD_LESSON_ID));
+                DatabaseTableLesson.delete(db, oldId);
             }
             c.moveToNext();
         }

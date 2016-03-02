@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Joel Goddard on 06/01/2016.
@@ -18,6 +19,7 @@ public class DatabaseTest {
 
     public static void printCursor(Cursor c, String name){
         c.moveToFirst();
+        Log.d("DATABASE", String.format("%d rows returned for %s", c.getCount(), name));
         for(int i=0; i<c.getCount(); i++){
             String s = String.format("%s %d {", name, i);
             for(int j=0; j<c.getColumnCount(); j++){
@@ -30,6 +32,17 @@ public class DatabaseTest {
             Log.d("DATABASE", s);
             c.move(1);
         }
+    }
+
+    public static void printRowNames(Cursor c, String name){
+        String s = name + ": ";
+        for(int i=0; i<c.getColumnCount();i++){
+            s += String.format("%1$s", c.getColumnName(i));
+            if (i<c.getColumnCount()-1){
+                s+=", ";
+            }
+        }
+        Log.d("DATABASE", s);
     }
 
     public static void printAllTables(Database db){
@@ -82,144 +95,180 @@ public class DatabaseTest {
         Database.wipeDatabase(context);
         db = new Database(context);
         Log.d("DATABASE", "Creating new database");
+        Log.d("DATABASE", "Creating table teachers for test 1.1.1");
+        printRowNames(DatabaseTableTeacher.getAll(db), "Test 1.1.1");
+        printCursor(DatabaseTableTeacher.getAll(db), "Test 1.1.2");
+        DatabaseTableTeacher.insert(db, "Teacher A");
+        printCursor(DatabaseTableTeacher.getAll(db), "Test 1.1.3");
+        DatabaseTableTeacher.delete(db, 1);
+        printCursor(DatabaseTableTeacher.getAll(db), "Test 1.1.4");
+        DatabaseTableTeacher.insert(db, "Teacher B");
+        DatabaseTableTeacher.insert(db, "Teacher C");
+        DatabaseTableTeacher.insert(db, "Teacher D");
+        printCursor(DatabaseTableTeacher.getAll(db), "Test 1.1.5");
+        DatabaseTableTeacher.update(db, 2, "Teacher E");
+        printCursor(DatabaseTableTeacher.getAll(db), "Test 1.1.6");
+        printCursor(DatabaseTableTeacher.getByID(db, 3), "Test 1.1.7");
+        printCursor(DatabaseTableTeacher.getByID(db, 4), "Test 1.1.8");
 
-        long idTeacherA = DatabaseTableTeacher.insert(db, "Teacher A");
-        long idTeacherB = DatabaseTableTeacher.insert(db, "Teacher B");
-        long idTeacherC = DatabaseTableTeacher.insert(db, "Teacher C");
-        long idTeacherD = DatabaseTableTeacher.insert(db, "Teacher D");
-        long idTeacherE = DatabaseTableTeacher.insert(db, "Teacher E");
-        long idTeacherF = DatabaseTableTeacher.insert(db, "Teacher F");
+        Log.d("DATABASE", "Creating table locations for test 1.2.1");
+        printRowNames(DatabaseTableLocation.getAll(db), "Test 1.2.1");
+        printCursor(DatabaseTableLocation.getAll(db), "Test 1.2.2");
+        DatabaseTableLocation.insert(db, "Location 1");
+        printCursor(DatabaseTableLocation.getAll(db), "Test 1.2.3");
+        DatabaseTableLocation.delete(db, 1);
+        printCursor(DatabaseTableLocation.getAll(db), "Test 1.2.4");
+        DatabaseTableLocation.insert(db, "Location 2");
+        DatabaseTableLocation.insert(db, "Location 3");
+        DatabaseTableLocation.insert(db, "Location 4");
+        printCursor(DatabaseTableLocation.getAll(db), "Test 1.2.5");
+        DatabaseTableLocation.update(db, 2, "Location 5");
+        printCursor(DatabaseTableLocation.getAll(db), "Test 1.2.6");
+        printCursor(DatabaseTableLocation.getByID(db, 3), "Test 1.2.7");
+        printCursor(DatabaseTableLocation.getByID(db, 4), "Test 1.2.8");
 
-        long idLocation1 = DatabaseTableLocation.insert(db, "A001");
-        long idLocation2 = DatabaseTableLocation.insert(db, "A002");
-        long idLocation3 = DatabaseTableLocation.insert(db, "B003");
-        long idLocation4 = DatabaseTableLocation.insert(db, "C004");
-        long idLocation5 = DatabaseTableLocation.insert(db, "D005");
-        long idLocation6 = DatabaseTableLocation.insert(db, "D006");
+        Log.d("DATABASE", "Creating table subject for test 1.3.1");
+        printRowNames(DatabaseTableSubject.getAll(db), "Test 1.3.1");
+        printCursor(DatabaseTableSubject.getAll(db), "Test 1.3.2");
+        DatabaseTableSubject.insert(db, "Subject 1", 0);
+        printCursor(DatabaseTableSubject.getAll(db), "Test 1.3.3");
+        DatabaseTableSubject.delete(db, 1);
+        printCursor(DatabaseTableSubject.getAll(db), "Test 1.3.4");
+        DatabaseTableSubject.insert(db, "Subject 2", 0);
+        DatabaseTableSubject.insert(db, "Subject 3", 0);
+        DatabaseTableSubject.insert(db, "Subject 4", 0);
+        printCursor(DatabaseTableSubject.getAll(db), "Test 1.3.5");
+        DatabaseTableSubject.update(db, 2, "Subject 5", 0);
+        printCursor(DatabaseTableSubject.getAll(db), "Test 1.3.6");
+        printCursor(DatabaseTableSubject.getByID(db, 3), "Test 1.3.7");
+        printCursor(DatabaseTableSubject.getByID(db, 4), "Test 1.3.8");
 
-        long idSubjectA = DatabaseTableSubject.insert(db, "Subject A", Color.rgb(20, 60, 20));
-        long idSubjectB = DatabaseTableSubject.insert(db, "Subject B", Color.rgb(100, 60, 20));
-        long idSubjectC = DatabaseTableSubject.insert(db, "Subject C", Color.rgb(250, 60, 20));
-        long idSubjectD = DatabaseTableSubject.insert(db, "Subject D", Color.rgb(20, 60, 250));
-        long idSubjectE = DatabaseTableSubject.insert(db, "Subject E", Color.rgb(20, 90, 20));
-        long idSubjectF = DatabaseTableSubject.insert(db, "Subject F", Color.rgb(60, 60, 90));
+        Log.d("DATABASE", "Creating table subjectTeacher for test 1.4.1");
+        printRowNames(DatabaseTableSubjectTeacher.getAll(db), "Test 1.4.1");
+        printCursor(DatabaseTableSubjectTeacher.getAll(db), "Test 1.4.2");
+        DatabaseTableSubjectTeacher.insert(db, 1, 1);
+        printCursor(DatabaseTableSubjectTeacher.getAll(db), "Test 1.4.3");
+        DatabaseTableSubjectTeacher.delete(db, 1, 1);
+        printCursor(DatabaseTableSubjectTeacher.getAll(db), "Test 1.4.4");
+        DatabaseTableSubjectTeacher.insert(db, 1, 1);
+        DatabaseTableSubjectTeacher.insert(db, 2, 1);
+        DatabaseTableSubjectTeacher.insert(db, 2, 3);
+        printCursor(DatabaseTableSubjectTeacher.getAll(db), "Test 1.4.5");
+        printCursor(DatabaseTableSubjectTeacher.getAllBySubjectID(db, 1), "Test 1.4.6");
+        printCursor(DatabaseTableSubjectTeacher.getAllBySubjectID(db, 3), "Test 1.4.7");
+        printCursor(DatabaseTableSubjectTeacher.getAllByTeacherID(db, 1), "Test 1.4.8");
+        printCursor(DatabaseTableSubjectTeacher.getAllByTeacherID(db, 3), "Test 1.4.9");
+        DatabaseTableSubjectTeacher.insert(db, 2, 2);
+        DatabaseTableSubjectTeacher.insert(db, 1, 2);
+        DatabaseTableSubjectTeacher.insert(db, 3, 3);
+        DatabaseTableSubjectTeacher.insert(db, 3, 1);
+        printCursor(DatabaseTableSubjectTeacher.getAll(db), "Test 1.4.10.0");
+        DatabaseTableSubjectTeacher.deleteBySubject(db, 3);
+        printCursor(DatabaseTableSubjectTeacher.getAll(db), "Test 1.4.10.1");
+        DatabaseTableSubjectTeacher.deleteByTeacher(db, 2);
+        printCursor(DatabaseTableSubjectTeacher.getAll(db), "Test 1.4.10.2");
 
-        DatabaseTableSubjectTeacher.insert(db, idSubjectA, idTeacherA);
-        DatabaseTableSubjectTeacher.insert(db, idSubjectB, idTeacherA);
-        DatabaseTableSubjectTeacher.insert(db, idSubjectB, idTeacherB);
-        DatabaseTableSubjectTeacher.insert(db, idSubjectC, idTeacherC);
-        DatabaseTableSubjectTeacher.insert(db, idSubjectC, idTeacherD);
-        DatabaseTableSubjectTeacher.insert(db, idSubjectD, idTeacherE);
-        DatabaseTableSubjectTeacher.insert(db, idSubjectE, idTeacherD);
-        DatabaseTableSubjectTeacher.insert(db, idSubjectE, idTeacherF);
-        DatabaseTableSubjectTeacher.insert(db, idSubjectF, idTeacherF);
+        Log.d("DATABASE", "Creating table subjectTeacher for test 1.5.1");
+        printRowNames(DatabaseTableSubjectLocation.getAll(db), "Test 1.5.1");
+        printCursor(DatabaseTableSubjectLocation.getAll(db), "Test 1.5.2");
+        DatabaseTableSubjectLocation.insert(db, 1, 1);
+        printCursor(DatabaseTableSubjectLocation.getAll(db), "Test 1.5.3");
+        DatabaseTableSubjectLocation.delete(db, 1, 1);
+        printCursor(DatabaseTableSubjectLocation.getAll(db), "Test 1.5.4");
+        DatabaseTableSubjectLocation.insert(db, 1, 1);
+        DatabaseTableSubjectLocation.insert(db, 2, 1);
+        DatabaseTableSubjectLocation.insert(db, 2, 3);
+        printCursor(DatabaseTableSubjectLocation.getAll(db), "Test 1.5.5");
+        printCursor(DatabaseTableSubjectLocation.getAllBySubjectID(db, 0), "Test 1.5.6");
+        printCursor(DatabaseTableSubjectLocation.getAllBySubjectID(db, 2), "Test 1.5.7");
+        printCursor(DatabaseTableSubjectLocation.getAllByLocationID(db, 0), "Test 1.5.8");
+        printCursor(DatabaseTableSubjectLocation.getAllByLocationID(db, 2), "Test 1.5.9");
+        DatabaseTableSubjectLocation.insert(db, 2, 2);
+        DatabaseTableSubjectLocation.insert(db, 1, 2);
+        DatabaseTableSubjectLocation.insert(db, 3, 3);
+        DatabaseTableSubjectLocation.insert(db, 3, 1);
+        printCursor(DatabaseTableSubjectLocation.getAll(db), "Test 1.5.10.0");
+        DatabaseTableSubjectLocation.deleteBySubject(db, 3);
+        printCursor(DatabaseTableSubjectLocation.getAll(db), "Test 1.5.10.1");
+        DatabaseTableSubjectLocation.deleteByLocation(db, 2);
+        printCursor(DatabaseTableSubjectLocation.getAll(db), "Test 1.5.10.2");
 
-        DatabaseTableSubjectLocation.insert(db, idSubjectA, idLocation1);
-        DatabaseTableSubjectLocation.insert(db, idSubjectB, idLocation1);
-        DatabaseTableSubjectLocation.insert(db, idSubjectB, idLocation2);
-        DatabaseTableSubjectLocation.insert(db, idSubjectC, idLocation3);
-        DatabaseTableSubjectLocation.insert(db, idSubjectC, idLocation4);
-        DatabaseTableSubjectLocation.insert(db, idSubjectD, idLocation5);
-        DatabaseTableSubjectLocation.insert(db, idSubjectE, idLocation4);
-        DatabaseTableSubjectLocation.insert(db, idSubjectE, idLocation6);
-        DatabaseTableSubjectLocation.insert(db, idSubjectF, idLocation6);
+        Log.d("DATABASE", "Creating table block for test 1.6.1");
+        printRowNames(DatabaseTableBlock.getAll(db), "Test 1.6.1");
+        printCursor(DatabaseTableBlock.getAll(db), "Test 1.6.2");
+        DatabaseTableBlock.insert(db, 1, 1200, 60, 2, 3, 2);
+        printCursor(DatabaseTableBlock.getAll(db), "Test 1.6.3");
+        DatabaseTableBlock.delete(db, 1);
+        printCursor(DatabaseTableBlock.getAll(db), "Test 1.6.4");
+        DatabaseTableBlock.insert(db, 4, 800, 65, 3, 2, 2);
+        DatabaseTableBlock.insert(db, 0, 750, 60, 1, 3, 3);
+        DatabaseTableBlock.insert(db, 6, 400, 30, 1, 2, 3);
+        printCursor(DatabaseTableBlock.getAll(db), "Test 1.6.5");
+        DatabaseTableBlock.update(db, 2, 4, 750, 70, 3, 2, 1);
+        printCursor(DatabaseTableBlock.getAll(db), "Test 1.6.6");
+        printCursor(DatabaseTableBlock.getByID(db, 2), "Test 1.6.7");
+        printCursor(DatabaseTableBlock.getByID(db, 4), "Test 1.6.8");
+        printCursor(DatabaseTableBlock.getByDay(db, 6), "Test 1.6.9");
+        printCursor(DatabaseTableBlock.getByDay(db, 4), "Test 1.6.10");
+        printCursor(DatabaseTableBlock.getByDay(db, 0), "Test 1.6.11");
 
-        long idBlockA1 = DatabaseTableBlock.insert(db, 1,  20, 65, idSubjectA, idTeacherA, idLocation1);
-        long idBlockA2 = DatabaseTableBlock.insert(db, 1,  90, 65, idSubjectB, idTeacherB, idLocation4);
-        long idBlockA3 = DatabaseTableBlock.insert(db, 1, 160, 65, idSubjectC, idTeacherC, idLocation6);
-        long idBlockA4 = DatabaseTableBlock.insert(db, 1, 230, 65, idSubjectA, idTeacherD, idLocation3);
-        long idBlockA5 = DatabaseTableBlock.insert(db, 2, 300, 65, idSubjectD, idTeacherE, idLocation3);
-        long idBlockB1 = DatabaseTableBlock.insert(db, 2,  30, 65, idSubjectE, idTeacherF, idLocation5);
-        long idBlockB2 = DatabaseTableBlock.insert(db, 2, 100, 65, idSubjectF, idTeacherB, idLocation6);
-        long idBlockB3 = DatabaseTableBlock.insert(db, 2, 170, 65, -1,         -1,         -1         );
-        long idBlockB4 = DatabaseTableBlock.insert(db, 2, 240, 65, idSubjectC, idTeacherE, idLocation4);
-        long idBlockB5 = DatabaseTableBlock.insert(db, 2, 310, 65, idSubjectB, idTeacherC, idLocation1);
+        Log.d("DATABASE", "Creating table lesson for test 1.7.1");
+        printRowNames(DatabaseTableLesson.getAll(db), "Test 1.7.1");
+        printCursor(DatabaseTableLesson.getAll(db), "Test 1.7.2");
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(1454284800000L);
+        DatabaseTableLesson.insert(db, 1, c, false);
+        printCursor(DatabaseTableLesson.getAll(db), "Test 1.7.3");
+        DatabaseTableLesson.delete(db, 1);
+        printCursor(DatabaseTableLesson.getAll(db), "Test 1.7.4");
+        c.setTimeInMillis(1454457600000L);
+        DatabaseTableLesson.insert(db, 1, c, false);
+        c.setTimeInMillis(1454544000000L);
+        DatabaseTableLesson.insert(db, 2, c, true);
+        c.setTimeInMillis(1454371200000L);
+        DatabaseTableLesson.insert(db, 3, c, false);
+        printCursor(DatabaseTableLesson.getAll(db), "Test 1.7.5");
+        c.setTimeInMillis(1454457600000L);
+        DatabaseTableLesson.update(db, 2, 1, c, true);
+        printCursor(DatabaseTableLesson.getAll(db), "Test 1.7.6");
+        printCursor(DatabaseTableLesson.getByID(db, 2), "Test 1.7.7");
+        printCursor(DatabaseTableLesson.getByID(db, 4), "Test 1.7.8");
+        c.setTimeInMillis(1454457600000L);
+        printCursor(DatabaseTableLesson.getByBlockIDAndDate(db, 3, c), "Test 1.7.9");
+        c.setTimeInMillis(1454544000000L);
+        printCursor(DatabaseTableLesson.getByBlockIDAndDate(db, 4, c), "Test 1.7.10");
+        c.setTimeInMillis(1454371200000L);
+        printCursor(DatabaseTableLesson.getByBlockIDAndDate(db, 3, c), "Test 1.7.11");
+        c=Calendar.getInstance();
+        int mins = c.get(Calendar.HOUR_OF_DAY)*60+c.get(Calendar.MINUTE)*60-15;
+        DatabaseTableBlock.insert(db, c.get(Calendar.DAY_OF_WEEK), mins, 30, 3, 2, 1);
+        c = Util.setDateToStart(c);
+        DatabaseTableLesson.insert(db, 4, c, false);
+        printCursor(DatabaseTableBlock.getAll(db), "Test 1.7.12.0a");
+        printCursor(DatabaseTableLesson.getAll(db), "Test 1.7.12.0b");
+        printCursor(DatabaseTableLesson.getByCurrentDay(db), "Test 1.7.12.1");
+        DatabaseTableLocation.delete(db, 4);
+        printCursor(DatabaseTableLesson.getAll(db), "Test 1.7.13.0");
+        printCursor(DatabaseTableLesson.getByCurrentDay(db), "Test 1.7.13.1");
 
-        long idLesson1a = DatabaseTableLesson.insert(db, idBlockA1, Calendar.getInstance(), false);
-        long idLesson2a = DatabaseTableLesson.insert(db, idBlockA2, Calendar.getInstance(), false);
-        long idLesson3a = DatabaseTableLesson.insert(db, idBlockA3, Calendar.getInstance(), false);
-        long idLesson4a = DatabaseTableLesson.insert(db, idBlockA4, Calendar.getInstance(), false);
-        long idLesson5a = DatabaseTableLesson.insert(db, idBlockA5, Calendar.getInstance(), false);
-        long idLesson6a = DatabaseTableLesson.insert(db, idBlockB1, Calendar.getInstance(), false);
-        long idLesson7a = DatabaseTableLesson.insert(db, idBlockB2, Calendar.getInstance(), false);
-        long idLesson8a = DatabaseTableLesson.insert(db, idBlockB3, Calendar.getInstance(), false);
-        long idLesson1b = DatabaseTableLesson.insert(db, idBlockA1, Calendar.getInstance(), false);
-        long idLesson2b = DatabaseTableLesson.insert(db, idBlockA2, Calendar.getInstance(), false);
-        long idLesson3b = DatabaseTableLesson.insert(db, idBlockA3, Calendar.getInstance(), false);
-        long idLesson4b = DatabaseTableLesson.insert(db, idBlockA4, Calendar.getInstance(), false);
-        long idLesson5b = DatabaseTableLesson.insert(db, idBlockA5, Calendar.getInstance(), false);
-        long idLesson6b = DatabaseTableLesson.insert(db, idBlockB1, Calendar.getInstance(), false);
-        long idLesson7b = DatabaseTableLesson.insert(db, idBlockB2, Calendar.getInstance(), false);
-        long idLesson8b = DatabaseTableLesson.insert(db, idBlockB3, Calendar.getInstance(), false);
-        long idLesson1c = DatabaseTableLesson.insert(db, idBlockB4, Calendar.getInstance(), false);
-        long idLesson2c = DatabaseTableLesson.insert(db, idBlockB4, Calendar.getInstance(), false);
-        long idLesson3c = DatabaseTableLesson.insert(db, idBlockB5, Calendar.getInstance(), false);
-        long idLesson4c = DatabaseTableLesson.insert(db, idBlockA1, Calendar.getInstance(), false);
-        long idLesson5c = DatabaseTableLesson.insert(db, idBlockA2, Calendar.getInstance(), false);
-
-        long idHomework1 = DatabaseTableHomework.insert(db, idLesson1a, idLesson1b, 60, Calendar.getInstance(), "Do the homework 1", "h1", false);
-        long idHomework2 = DatabaseTableHomework.insert(db, idLesson2a, idLesson6a, 60, Calendar.getInstance(), "Do the homework 2", "h2", false);
-        long idHomework3 = DatabaseTableHomework.insert(db, idLesson2a, idLesson4b, 120, Calendar.getInstance(), "Do the homework 3", "h3", false);
-        long idHomework4 = DatabaseTableHomework.insert(db, idLesson3a, idLesson5b, 60, Calendar.getInstance(), "Do the homework 4", "h4", false);
-        long idHomework5 = DatabaseTableHomework.insert(db, idLesson1b, idLesson2c, 60, Calendar.getInstance(), "Do the homework 5", "h5", false);
-        long idHomework6 = DatabaseTableHomework.insert(db, idLesson3a, idLesson3c, 60, Calendar.getInstance(), "Do the homework 6", "h6", false);
-
-        printAllTables(db);
-
-        Log.d("DATABASE", "--------------------------------------------------\n" +
-                "Deleting Stuff");
-
-        DatabaseTableTeacher.delete(db, idTeacherF);
-        DatabaseTableLocation.delete(db, idLocation6);
-        DatabaseTableSubject.delete(db, idSubjectF);
-        DatabaseTableSubjectLocation.delete(db, idSubjectE, idLocation4);
-        DatabaseTableSubjectTeacher.delete(db, idSubjectE, idTeacherD);
-        DatabaseTableBlock.delete(db, idBlockB5);
-        DatabaseTableLesson.delete(db, idLesson8b);
-        DatabaseTableHomework.delete(db, idHomework6);
-
-        printAllTables(db);
-
-//        Log.d("DATABASE", "Print Block Table");
-//        Cursor c = DatabaseTableBlock.getAll(db);
-//        c.moveToFirst();
-//        for(int i=0; i<c.getCount();i++){
-//            Log.d("DATABASE", String.format("Block: id %1$s, day %2$s, startTime %3$s, length %4$s",
-//                    c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_BLOCK_ID)),
-//                    c.getString(c.getColumnIndex(DatabaseTableBlock.FIELD_DAY)),
-//                    c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_START_TIME)),
-//                    c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_LENGTH))));
-//            c.move(1);
-//        }
-//        c.close();
-//        c = DatabaseTableBlock.getByID(db, idBlock);
-//        Log.d("DATABASE", String.valueOf(idBlock));
-//        c.moveToFirst();
-//        Log.d("DATABASE", String.format("Block: id %1$s, day %2$s, startTime %3$s, length %4$s",
-//                c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_BLOCK_ID)),
-//                c.getString(c.getColumnIndex(DatabaseTableBlock.FIELD_DAY)),
-//                c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_START_TIME)),
-//                c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_LENGTH))));
-//
-//        SQLiteDatabase dbr = db.getReadableDatabase();
-//        c.close();
-//        c = DatabaseTableLesson.getAllWithBlock(db);
-//
-//        c.moveToFirst();
-//        for(int i=0; i<c.getCount();i++){
-//            Log.d("DATABASE", String.format("Lesson: date %s, canceled %s, day %s, startTime %s, length %s, subject %s, colour %s, teacher %s, location %s",
-//                    c.getString(c.getColumnIndex(DatabaseTableLesson.TABLE_LESSON_NAME + DatabaseTableLesson.FIELD_DAY)),
-//                    c.getInt(c.getColumnIndex(DatabaseTableLesson.FIELD_CANCELED)),
-//                    c.getInt(c.getColumnIndex(DatabaseTableBlock.TABLE_BLOCK_NAME + DatabaseTableBlock.FIELD_DAY)),
-//                    c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_START_TIME)),
-//                    c.getInt(c.getColumnIndex(DatabaseTableBlock.FIELD_LENGTH)),
-//                    c.getString(c.getColumnIndex(DatabaseTableSubject.TABLE_SUBJECT_NAME + DatabaseTableSubject.FIELD_NAME)),
-//                    c.getInt(c.getColumnIndex(DatabaseTableSubject.FIELD_COLOUR)),
-//                    c.getString(c.getColumnIndex(DatabaseTableTeacher.TABLE_TEACHER_NAME + DatabaseTableTeacher.FIELD_NAME)),
-//                    c.getString(c.getColumnIndex(DatabaseTableLocation.TABLE_LOCATION_NAME + DatabaseTableLocation.FIELD_NAME))
-//                    ));
-//            c.move(1);
-//
-//        }
+        Log.d("DATABASE", "Creating table homework for test 1.8.1");
+        printRowNames(DatabaseTableHomework.getAll(db), "Test 1.8.1");
+        printCursor(DatabaseTableHomework.getAll(db), "Test 1.8.2");
+        DatabaseTableHomework.insert(db, 1, 2, 0, 0, "Description A", "", false);
+        printCursor(DatabaseTableHomework.getAll(db), "Test 1.8.3");
+        DatabaseTableHomework.delete(db, 0);
+        printCursor(DatabaseTableHomework.getAll(db), "Test 1.8.4");
+        DatabaseTableHomework.insert(db, 0, 1, 0, 0, "Description B", "One line description", false);
+        DatabaseTableHomework.insert(db, 0, 2, 0, 0,"Description C", "Long description with lots of padding padding padding padding padding padding", true);
+        DatabaseTableHomework.insert(db, 1, 2, 0, 0, "Description D", "", false);
+        printCursor(DatabaseTableHomework.getAll(db), "Test 1.8.5");
+        DatabaseTableHomework.update(db, 2, 0, 1, 0, 0, "Description E", "", false);
+        printCursor(DatabaseTableHomework.getAll(db), "Test 1.8.6");
+        printCursor(DatabaseTableHomework.getByID(db, 1), "Test 1.8.7");
+        printCursor(DatabaseTableHomework.getByID(db, 3), "Test 1.8.8");
+        printCursor(DatabaseTableHomework.getByLessonSet(db, 0), "Test 1.8.9");
+        printCursor(DatabaseTableHomework.getByLessonSet(db, 2), "Test 1.8.10");
+        printCursor(DatabaseTableHomework.getByLessonDue(db, 2), "Test 1.8.11");
+        printCursor(DatabaseTableHomework.getByLessonDue(db, 0), "Test 1.8.12");
     }
 }

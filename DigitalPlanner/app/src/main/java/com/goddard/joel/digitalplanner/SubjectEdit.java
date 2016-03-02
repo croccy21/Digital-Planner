@@ -1,21 +1,28 @@
 package com.goddard.joel.digitalplanner;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SubjectEdit extends AppCompatActivity {
 
@@ -49,9 +56,9 @@ public class SubjectEdit extends AppCompatActivity {
     private Database db;
 
     private ListView teacherList;
-    public ArrayAdapter<String> teacherAdapter;
+    public ArrayAdapterWithButton teacherAdapter;
     private ListView locationList;
-    public ArrayAdapter<String> locationAdapter;
+    public ArrayAdapterWithButton locationAdapter;
     private long id;
     private int selection=SELECTION_BUTTON;
 
@@ -107,6 +114,10 @@ public class SubjectEdit extends AppCompatActivity {
                 subjectNameEdit.setText(name);
             }
         }
+        else{
+            View button = findViewById(R.id.delete);
+            button.setVisibility(View.GONE);
+        }
 
         //Populates allTeachers array from database
         Cursor cT = DatabaseTableTeacher.getAll(db);
@@ -128,10 +139,23 @@ public class SubjectEdit extends AppCompatActivity {
             cL.move(1);
         }
 
-        teacherAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, packTeacher(subjectTeachers));
+        teacherAdapter = new ArrayAdapterWithButton(this, packTeacher(subjectTeachers));
+        teacherAdapter.setOnCrossClickListener(new ArrayAdapterWithButton.OnCrossClickListener() {
+            @Override
+            public void onCrossClick(int position) {
+                Log.d("Interface", "received");
+                removeTeacher(position);
+            }
+        });
         teacherList.setAdapter(teacherAdapter);
 
-        locationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, packLocation(subjectLocations));
+        locationAdapter = new ArrayAdapterWithButton(this, packLocation(subjectLocations));
+        locationAdapter.setOnCrossClickListener(new ArrayAdapterWithButton.OnCrossClickListener() {
+            @Override
+            public void onCrossClick(int position) {
+                removeLocation(position);
+            }
+        });
         locationList.setAdapter(locationAdapter);
 
         //Checks when NEW [TEACHER/LOCATION] is selected and goes to selection new
@@ -344,6 +368,12 @@ public class SubjectEdit extends AppCompatActivity {
         teacherAdapter.notifyDataSetChanged();
     }
 
+    private void removeTeacher(int position) {
+        subjectTeachers.remove(position);
+        teacherAdapter.remove(teacherAdapter.getItem(position));
+        teacherAdapter.notifyDataSetChanged();
+    }
+
     /**
      * Adds a location to the location {@link ListView}
      * @param l location
@@ -351,6 +381,12 @@ public class SubjectEdit extends AppCompatActivity {
     public void addLocationToList(Location l){
         subjectLocations.add(l);
         locationAdapter.insert(l.getName(), locationAdapter.getCount());
+        locationAdapter.notifyDataSetChanged();
+    }
+
+    private void removeLocation(int position) {
+        subjectLocations.remove(position);
+        locationAdapter.remove(locationAdapter.getItem(position));
         locationAdapter.notifyDataSetChanged();
     }
 
@@ -503,5 +539,53 @@ public class SubjectEdit extends AppCompatActivity {
             setResult(RESULT_CANCELED);
             finish();
         }
+    }
+
+    private static class ArrayAdapterWithButton extends ArrayAdapter{
+
+        interface OnCrossClickListener{
+            void onCrossClick(int position);
+        }
+
+        private OnCrossClickListener onCrossClickListener;
+
+        public ArrayAdapterWithButton(Context context, List<String> names) {
+            super(context, R.layout.list_item_with_cross);
+            for(String name:names){
+                add(name);
+            }
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View v = convertView;
+            if(v==null){
+                LayoutInflater vi;
+                vi = LayoutInflater.from(getContext());
+                v = vi.inflate(R.layout.list_item_with_cross, null);
+            }
+
+            TextView t = (TextView) v.findViewById(R.id.text);
+            t.setText((String) getItem(position));
+            ImageButton b = (ImageButton) v.findViewById(R.id.button);
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("Interface", "click detected");
+                    onCrossClickListener.onCrossClick(position);
+                }
+            });
+            return v;
+        }
+
+        public OnCrossClickListener getOnCrossClickListener() {
+            return onCrossClickListener;
+        }
+
+        public void setOnCrossClickListener(OnCrossClickListener onCrossClickListener) {
+            this.onCrossClickListener = onCrossClickListener;
+        }
+
+
     }
 }
