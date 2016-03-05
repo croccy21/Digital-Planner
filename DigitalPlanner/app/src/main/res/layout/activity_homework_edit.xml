@@ -10,34 +10,65 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button
-            android:layout_width="0dp"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="8dp">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="LESSON SET"
-            android:layout_margin="4dp"
-            android:id="@+id/btn_lesson_set"
-            android:onClick="lessonSetClick"/>
-        <Button
-            android:layout_width="0dp"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="LESSON SET"
+                android:layout_margin="4dp"
+                android:id="@+id/btn_lesson_set"
+                android:onClick="lessonSetClick"
+                android:textColor="@color/colorAccent"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="LESSON DUE"
+                android:layout_margin="4dp"
+                android:id="@+id/btn_lesson_due"
+                android:onClick="lessonDueClick"
+                android:textColor="@color/colorAccent"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="LESSON DUE"
-            android:layout_margin="4dp"
-            android:id="@+id/btn_lesson_due"
-            android:onClick="lessonDueClick"/>
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:textSize="18sp"
+                android:padding="4dp"
+                android:text="No Day Set"
+                android:textColor="#ffffff"
+
+                android:id="@+id/set_time"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:textSize="18sp"
+                android:padding="4dp"
+                android:text="No Day Due"
+                android:textColor="#ffffff"
+
+                android:id="@+id/due_time"/>
+        </LinearLayout>
+
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="No Subject Selected"
-        android:gravity="center_horizontal"
-        android:textSize="16sp"
-        android:padding="4dp"
-
-        android:id="@+id/subject_display"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,23 +78,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:textSize="18sp"
+            android:text="No Subject Selected"
+            android:textSize="16sp"
             android:padding="4dp"
-            android:text="No Day Set"
+            android:layout_gravity="center_vertical"
 
-            android:id="@+id/set_time"/>
+            android:id="@+id/subject_display"/>
 
-        <TextView
-            android:layout_width="0dp"
+        <Switch
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:textSize="18sp"
+            android:text="Not Done"
             android:padding="4dp"
-            android:text="No Day Due"
-
-            android:id="@+id/due_time"/>
+            android:layout_gravity="end|center_vertical"
+            android:id="@+id/done_switch"/>
     </LinearLayout>
 
     <EditText
@@ -83,14 +111,6 @@
         android:minLines="5"
         android:id="@+id/long_description"
         />
-
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Not Done"
-        android:padding="4dp"
-        android:layout_gravity="end"
-        android:id="@+id/done_switch"/>
 
     <LinearLayout
         android:layout_width="match_parent"

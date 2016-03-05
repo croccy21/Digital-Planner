@@ -8,7 +8,6 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -21,7 +20,7 @@ import java.util.Calendar;
 /**
  * TODO: document your custom view class.
  */
-public class CalenderView extends LinearLayout {
+public class CalendarView extends LinearLayout {
 
     public interface OnItemClickListener{
         void onItemClick(AdapterView<?> parent, View view, int position, long id);
@@ -29,14 +28,8 @@ public class CalenderView extends LinearLayout {
 
     private OnItemClickListener onItemClickListener;
 
-    private String mExampleString; // TODO: use a default from R.string...
-
     private boolean showCanceled;
     private boolean showHomeworks;
-
-    private TextPaint mTextPaint;
-    private float mTextWidth;
-    private float mTextHeight;
 
     private Button nextDay;
     private Button previousDay;
@@ -80,17 +73,17 @@ public class CalenderView extends LinearLayout {
         }
     };
 
-    public CalenderView(Context context) {
+    public CalendarView(Context context) {
         super(context);
         init(null, 0);
     }
 
-    public CalenderView(Context context, AttributeSet attrs) {
+    public CalendarView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs, 0);
     }
 
-    public CalenderView(Context context, AttributeSet attrs, int defStyle) {
+    public CalendarView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs, defStyle);
     }
@@ -104,7 +97,7 @@ public class CalenderView extends LinearLayout {
         };
 
         calendar = Calendar.getInstance();
-        inflate(getContext(), R.layout.calender_widget, this);
+        inflate(getContext(), R.layout.calendar_widget, this);
         nextDay = (Button) findViewById(R.id.next_button);
         previousDay = (Button) findViewById(R.id.previous_button);
         chooseDayButton = (Button) findViewById(R.id.day_text);
@@ -122,32 +115,15 @@ public class CalenderView extends LinearLayout {
 
         // Load attributes
         final TypedArray a = getContext().obtainStyledAttributes(
-                attrs, R.styleable.CalenderView, defStyle, 0);
-        mExampleString = a.getString(
-                R.styleable.CalenderView_exampleString);
+                attrs, R.styleable.CalendarView, defStyle, 0);
         a.recycle();
-
-        // Set up a default TextPaint object
-        mTextPaint = new TextPaint();
-        mTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        mTextPaint.setTextAlign(Paint.Align.LEFT);
-
-        // Update TextPaint and text measurements from attributes
-        //invalidateTextPaintAndMeasurements();
-    }
-
-    private void invalidateTextPaintAndMeasurements() {
-        mTextWidth = mTextPaint.measureText(mExampleString);
-
-        Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
-        mTextHeight = fontMetrics.bottom;
     }
 
     public void populate(){
-        CalenderAdapter adapter = new CalenderAdapter(getContext(), db, calendar);
+        CalendarAdapter adapter = new CalendarAdapter(getContext(), db, calendar);
         adapter.setShowCanceled(showCanceled);
         adapter.setShowHomeworks(showHomeworks);
-        adapter.setLessonCanceledChangedListener(new CalenderAdapter.OnLessonCanceledChanged() {
+        adapter.setLessonCanceledChangedListener(new CalendarAdapter.OnLessonCanceledChanged() {
             @Override
             public void onLessonCancelChange(View v, int position, boolean canceled) {
                 Log.d("DATABASE", String.format("position: %d", position));
@@ -159,26 +135,6 @@ public class CalenderView extends LinearLayout {
         list.setAdapter(adapter);
         SimpleDateFormat df = new SimpleDateFormat(getResources().getString(R.string.date_button_text));
         chooseDayButton.setText(df.format(calendar.getTime()));
-    }
-
-    /**
-     * Gets the example string attribute value.
-     *
-     * @return The example string attribute value.
-     */
-    public String getExampleString() {
-        return mExampleString;
-    }
-
-    /**
-     * Sets the view's example string attribute value. In the example view, this string
-     * is the text to draw.
-     *
-     * @param exampleString The example string attribute value to use.
-     */
-    public void setExampleString(String exampleString) {
-        mExampleString = exampleString;
-        invalidateTextPaintAndMeasurements();
     }
 
     public Database getDb() {
@@ -212,7 +168,7 @@ public class CalenderView extends LinearLayout {
      */
     public void setShowCanceled(boolean showCanceled) {
         this.showCanceled = showCanceled;
-        CalenderAdapter adapter = (CalenderAdapter) list.getAdapter();
+        CalendarAdapter adapter = (CalendarAdapter) list.getAdapter();
         if(adapter!=null) {
             adapter.setShowCanceled(showCanceled);
             list.invalidate();
@@ -225,7 +181,7 @@ public class CalenderView extends LinearLayout {
 
     public void setShowHomeworks(boolean showHomeworks) {
         this.showHomeworks = showHomeworks;
-        CalenderAdapter adapter = (CalenderAdapter) list.getAdapter();
+        CalendarAdapter adapter = (CalendarAdapter) list.getAdapter();
         if(adapter!=null) {
             adapter.setShowHomeworks(showHomeworks);
             list.invalidate();

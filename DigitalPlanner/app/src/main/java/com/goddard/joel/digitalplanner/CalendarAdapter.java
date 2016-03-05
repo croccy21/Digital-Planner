@@ -23,7 +23,7 @@ import java.util.Calendar;
  *
  * @author Joel Goddard
  */
-public class CalenderAdapter extends ArrayAdapter {
+public class CalendarAdapter extends ArrayAdapter {
 
 
     public OnLessonCanceledChanged getLessonCanceledChangedListener() {
@@ -46,7 +46,7 @@ public class CalenderAdapter extends ArrayAdapter {
 
     private OnLessonCanceledChanged lessonCanceledChangedListener;
 
-    public CalenderAdapter(Context context, Database db, Calendar calendar) {
+    public CalendarAdapter(Context context, Database db, Calendar calendar) {
         super(context, R.layout.calendar_block);
 
         lessonCanceledChangedListener = new OnLessonCanceledChanged() {

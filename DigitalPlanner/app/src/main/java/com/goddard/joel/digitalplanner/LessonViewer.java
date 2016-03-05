@@ -105,6 +105,7 @@ public class LessonViewer extends AppCompatActivity {
             startActivityForResult(i, REQUEST_CODE_REDRAW);
         }
         if (id == R.id.action_delete){
+            DatabaseTableLesson.deleteByBlock(db, l.getBlock().getId());
             DatabaseTableBlock.delete(db, l.getBlock().getId());
             setResult(RESULT_CANCELED);
             finish();

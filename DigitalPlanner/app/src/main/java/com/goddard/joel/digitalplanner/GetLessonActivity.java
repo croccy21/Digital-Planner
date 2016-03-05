@@ -10,7 +10,7 @@ public class GetLessonActivity extends AppCompatActivity {
 
     public static final String EXTRA_LESSON_ID = "lesson id";
     private Database db;
-    private CalenderView calenderView;
+    private CalendarView calenderView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,11 +19,11 @@ public class GetLessonActivity extends AppCompatActivity {
 
         db = new Database(this);
 
-        calenderView = (CalenderView) findViewById(R.id.calendar);
+        calenderView = (CalendarView) findViewById(R.id.calendar);
         calenderView.setDb(db);
         calenderView.populate();
         calenderView.setShowCanceled(false);
-        calenderView.setOnItemClickListener(new CalenderView.OnItemClickListener() {
+        calenderView.setOnItemClickListener(new CalendarView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent();

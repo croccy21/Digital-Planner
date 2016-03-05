@@ -168,7 +168,7 @@ public class DatabaseTest {
         DatabaseTableSubjectTeacher.deleteByTeacher(db, 2);
         printCursor(DatabaseTableSubjectTeacher.getAll(db), "Test 1.4.10.2");
 
-        Log.d("DATABASE", "Creating table subjectTeacher for test 1.5.1");
+        Log.d("DATABASE", "Creating table subjectLocation for test 1.5.1");
         printRowNames(DatabaseTableSubjectLocation.getAll(db), "Test 1.5.1");
         printCursor(DatabaseTableSubjectLocation.getAll(db), "Test 1.5.2");
         DatabaseTableSubjectLocation.insert(db, 1, 1);
@@ -179,10 +179,10 @@ public class DatabaseTest {
         DatabaseTableSubjectLocation.insert(db, 2, 1);
         DatabaseTableSubjectLocation.insert(db, 2, 3);
         printCursor(DatabaseTableSubjectLocation.getAll(db), "Test 1.5.5");
-        printCursor(DatabaseTableSubjectLocation.getAllBySubjectID(db, 0), "Test 1.5.6");
-        printCursor(DatabaseTableSubjectLocation.getAllBySubjectID(db, 2), "Test 1.5.7");
-        printCursor(DatabaseTableSubjectLocation.getAllByLocationID(db, 0), "Test 1.5.8");
-        printCursor(DatabaseTableSubjectLocation.getAllByLocationID(db, 2), "Test 1.5.9");
+        printCursor(DatabaseTableSubjectLocation.getAllBySubjectID(db, 1), "Test 1.5.6");
+        printCursor(DatabaseTableSubjectLocation.getAllBySubjectID(db, 3), "Test 1.5.7");
+        printCursor(DatabaseTableSubjectLocation.getAllByLocationID(db, 1), "Test 1.5.8");
+        printCursor(DatabaseTableSubjectLocation.getAllByLocationID(db, 3), "Test 1.5.9");
         DatabaseTableSubjectLocation.insert(db, 2, 2);
         DatabaseTableSubjectLocation.insert(db, 1, 2);
         DatabaseTableSubjectLocation.insert(db, 3, 3);
@@ -256,19 +256,19 @@ public class DatabaseTest {
         printCursor(DatabaseTableHomework.getAll(db), "Test 1.8.2");
         DatabaseTableHomework.insert(db, 1, 2, 0, 0, "Description A", "", false);
         printCursor(DatabaseTableHomework.getAll(db), "Test 1.8.3");
-        DatabaseTableHomework.delete(db, 0);
+        DatabaseTableHomework.delete(db, 1);
         printCursor(DatabaseTableHomework.getAll(db), "Test 1.8.4");
-        DatabaseTableHomework.insert(db, 0, 1, 0, 0, "Description B", "One line description", false);
-        DatabaseTableHomework.insert(db, 0, 2, 0, 0,"Description C", "Long description with lots of padding padding padding padding padding padding", true);
-        DatabaseTableHomework.insert(db, 1, 2, 0, 0, "Description D", "", false);
+        DatabaseTableHomework.insert(db, 1, 2, 0, 0, "Description B", "One line description", false);
+        DatabaseTableHomework.insert(db, 1, 3, 0, 0,"Description C", "Long description with lots of padding padding padding padding padding padding", true);
+        DatabaseTableHomework.insert(db, 2, 3, 0, 0, "Description D", "", false);
         printCursor(DatabaseTableHomework.getAll(db), "Test 1.8.5");
-        DatabaseTableHomework.update(db, 2, 0, 1, 0, 0, "Description E", "", false);
+        DatabaseTableHomework.update(db, 3, 1, 1, 0, 0, "Description E", "", false);
         printCursor(DatabaseTableHomework.getAll(db), "Test 1.8.6");
-        printCursor(DatabaseTableHomework.getByID(db, 1), "Test 1.8.7");
-        printCursor(DatabaseTableHomework.getByID(db, 3), "Test 1.8.8");
-        printCursor(DatabaseTableHomework.getByLessonSet(db, 0), "Test 1.8.9");
-        printCursor(DatabaseTableHomework.getByLessonSet(db, 2), "Test 1.8.10");
-        printCursor(DatabaseTableHomework.getByLessonDue(db, 2), "Test 1.8.11");
-        printCursor(DatabaseTableHomework.getByLessonDue(db, 0), "Test 1.8.12");
+        printCursor(DatabaseTableHomework.getByID(db, 2), "Test 1.8.7");
+        printCursor(DatabaseTableHomework.getByID(db, 4), "Test 1.8.8");
+        printCursor(DatabaseTableHomework.getByLessonSet(db, 1), "Test 1.8.9");
+        printCursor(DatabaseTableHomework.getByLessonSet(db, 3), "Test 1.8.10");
+        printCursor(DatabaseTableHomework.getByLessonDue(db, 3), "Test 1.8.11");
+        printCursor(DatabaseTableHomework.getByLessonDue(db, 1), "Test 1.8.12");
     }
 }

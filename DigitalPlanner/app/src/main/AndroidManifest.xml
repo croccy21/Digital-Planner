@@ -12,11 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
             android:name=".BlockEdit"
             android:label="@string/edit_block_name"
             android:windowSoftInputMode="adjustPan">
@@ -76,7 +71,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SubjectList"
+            android:name=".SubjectManager"
             android:label="@string/title_activity_subject_list"
             android:theme="@style/AppTheme">
         </activity>

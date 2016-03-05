@@ -377,7 +377,7 @@ public class BlockEdit extends AppCompatActivity {
     }
 
     public void subject_button(View view) {
-        Intent i = new Intent(this, SubjectList.class);
+        Intent i = new Intent(this, SubjectManager.class);
         startActivity(i);
     }
 }

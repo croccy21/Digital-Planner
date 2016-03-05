@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,8 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CursorAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -49,7 +46,7 @@ public class HomeworkList extends AppCompatActivity {
         db = new Database(this);
 
         homeworkList = (ListView) findViewById(R.id.homework_list);
-        homeworkList.setAdapter(new HomeworkCursorAdapter(this, db));
+        homeworkList.setAdapter(new HomeworkDatabaseAdapter(this, db));
         homeworkList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -94,19 +91,19 @@ public class HomeworkList extends AppCompatActivity {
         if(resultCode==RESULT_OK){
             switch (requestCode){
                 case REQUEST_CODE_EDIT:{
-                    homeworkList.setAdapter(new HomeworkCursorAdapter(this, db));
+                    homeworkList.setAdapter(new HomeworkDatabaseAdapter(this, db));
                 }
                 case REQUEST_CODE_NEW:{
-                    homeworkList.setAdapter(new HomeworkCursorAdapter(this, db));
+                    homeworkList.setAdapter(new HomeworkDatabaseAdapter(this, db));
                 }
             }
         }
     }
 
-    private class HomeworkCursorAdapter extends ArrayAdapter {
+    private class HomeworkDatabaseAdapter extends ArrayAdapter {
 
 
-        public HomeworkCursorAdapter(Context context, Database db) {
+        public HomeworkDatabaseAdapter(Context context, Database db) {
             super(context, R.layout.homework_list_item);
 
             Cursor c = DatabaseTableHomework.getAll(db);

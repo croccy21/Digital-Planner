@@ -86,6 +86,12 @@ public class DatabaseTableLesson {
         Log.d("DATABASE", String.format("Delete lesson with Index %1$s", lessonID));
     }
 
+    public static void deleteByBlock(Database db, long blockId) {
+        SQLiteDatabase dbw = db.getWritableDatabase();
+        dbw.delete(TABLE_LESSON_NAME, String.format("%s=%d", FIELD_BLOCK_ID, blockId), null);
+        Log.d("DATABASE", String.format("Deleted lessons with block %1$s", blockId));
+    }
+
     /**
      * Get all lessons
      * @param db database
@@ -211,11 +217,11 @@ public class DatabaseTableLesson {
         SQLiteDatabase dbr = db.getReadableDatabase();
         return dbr.rawQuery(String.format(
                 "SELECT %3$s, %1$s.%4$s as %4$s, %1$s.%5$s as %5$s, %6$s " +
-                "FROM %1$S " +
-                "LEFT JOIN %2$s ON %1$s.%4$s = %2$s.%7$s " +
-                "WHERE %1$s.%5$s=%11$s " +
-                "AND %8$s<%10$s " +
-                "AND %8$s+%9$s>%10$s",
+                        "FROM %1$S " +
+                        "LEFT JOIN %2$s ON %1$s.%4$s = %2$s.%7$s " +
+                        "WHERE %1$s.%5$s=%11$s " +
+                        "AND %8$s<%10$s " +
+                        "AND %8$s+%9$s>%10$s",
                 DatabaseTableLesson.TABLE_LESSON_NAME,
                 DatabaseTableBlock.TABLE_BLOCK_NAME,
                 DatabaseTableLesson.FIELD_LESSON_ID,
@@ -237,5 +243,4 @@ public class DatabaseTableLesson {
         SQLiteDatabase dbr = db.getReadableDatabase();
         return dbr.query(false, TABLE_LESSON_NAME, null, String.format("%s=%d", FIELD_DAY, date), null, null, null, null, null);
     }
-
 }

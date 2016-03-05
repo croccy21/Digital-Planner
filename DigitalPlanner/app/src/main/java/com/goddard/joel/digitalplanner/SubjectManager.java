@@ -16,7 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class SubjectList extends AppCompatActivity {
+public class SubjectManager extends AppCompatActivity {
 
     private static final int REQUEST_CODE_REDRAW = 1;
     private ListView l;

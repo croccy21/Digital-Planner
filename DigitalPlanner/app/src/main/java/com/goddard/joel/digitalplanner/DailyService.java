@@ -59,10 +59,10 @@ public class DailyService extends IntentService {
         Cursor c = DatabaseTableBlock.getByDay(db, day);
         c.moveToFirst();
         for(int i=0;i<c.getCount();i++){
+            calendar = Util.setDateToStart(calendar);//resets the calendar day to zero
             Lesson l = new Lesson(db, c.getLong(c.getColumnIndex(DatabaseTableBlock.FIELD_BLOCK_ID)), calendar);
             if(!l.isCanceled()){
                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);//gets the alarm service
-                calendar = Util.setDateToStart(calendar);//resets the calendar day to zero
                 calendar.set(Calendar.MINUTE, l.getBlock().getStartTime() - 5);//sets minutes to that of lesson start - 5
                 Calendar now = Calendar.getInstance();
                 if(calendar.getTimeInMillis()>now.getTimeInMillis()) {//If in future
